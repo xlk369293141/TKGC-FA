@@ -21,6 +21,7 @@ class Dataset(object):
         self.n_entities = int(max(maxis[0], maxis[2]) + 1)
         self.n_predicates = int(maxis[1] + 1)
         self.n_predicates *= 2
+        self.n_timestamp=int(self.data['train'][3]+1)
 
         inp_f = open(os.path.join(self.root, 'to_skip.pickle'), 'rb')
         self.to_skip: Dict[str, Dict[Tuple[int, int], List[int]]] = pickle.load(inp_f)
@@ -42,10 +43,12 @@ class Dataset(object):
 
     def get_train(self):
         copy = np.copy(self.data['train'])
-        tmp = np.copy(copy[:, 0])
-        copy[:, 0] = copy[:, 2]
-        copy[:, 2] = tmp
-        copy[:, 1] += self.n_predicates // 2  # has been multiplied by two.
+        tmp1 = np.copy(copy[:, 0])
+        tmp2 = np.copy(copy[:, 1])
+        copy[:, 0] = copy[:, 3]
+        copy[:, 1] = copy[:, 2]
+        copy[:, 2] = tmp2  
+        copy[:, 3] = tmp1
         return np.vstack((self.data['train'], copy))
 
     def eval(
@@ -69,10 +72,12 @@ class Dataset(object):
                 permutation = torch.randperm(len(examples))[:n_queries]
                 q = examples[permutation]
             if m == 'lhs':
-                tmp = torch.clone(q[:, 0])
-                q[:, 0] = q[:, 2]
-                q[:, 2] = tmp
-                q[:, 1] += self.n_predicates // 2
+                tmp1 = torch.clone(q[:, 0])
+                tmp2 = torch.clone(q[:,1])
+                q[:, 0] = q[:, 3]
+                q[:, 3] = tmp1
+                q[:, 1] = q[:, 2]
+                q[:, 2] = tmp2
             ranks = model.get_ranking(q, self.to_skip[m], batch_size=500)
 
             if log_result:
@@ -93,4 +98,4 @@ class Dataset(object):
         return mean_reciprocal_rank, hits_at
 
     def get_shape(self):
-        return self.n_entities, self.n_predicates, self.n_entities
+        return self.n_entities, self.n_predicates, self.n_entities, self.n_timestamp
