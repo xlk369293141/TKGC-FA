@@ -16,16 +16,27 @@ class Dataset(object):
             self.data[f] = pickle.load(in_file)
 
         print(self.data['train'].shape)
+        self.convertTimes()
 
         maxis = np.max(self.data['train'], axis=0)
         self.n_entities = int(max(maxis[0], maxis[2]) + 1)
         self.n_predicates = int(maxis[1] + 1)
         self.n_predicates *= 2
-        self.n_timestamp=int(self.data['train'][3]+1)
+        self.time = int(self.data['train'][3]+1)
+        self.date = int(self.data['train'][4]+1)
+        self.day = int(self.data['train'][5]+1)
 
         inp_f = open(os.path.join(self.root, 'to_skip.pickle'), 'rb')
         self.to_skip: Dict[str, Dict[Tuple[int, int], List[int]]] = pickle.load(inp_f)
         inp_f.close()
+
+    def convertTimes(self):      
+        for split in ['train', 'valid', 'test']:
+            for i, fact in enumerate(self.data[split]):
+                fact_date = fact[-1]
+                self.data[split][i] = self.data[split][i][:-1]
+                date = list(map(float, fact_date.split("-")))
+                self.data[split][i] += date
 
     def get_weight(self):
         appear_list = np.zeros(self.n_entities)
@@ -45,10 +56,13 @@ class Dataset(object):
         copy = np.copy(self.data['train'])
         tmp1 = np.copy(copy[:, 0])
         tmp2 = np.copy(copy[:, 1])
-        copy[:, 0] = copy[:, 3]
-        copy[:, 1] = copy[:, 2]
-        copy[:, 2] = tmp2  
-        copy[:, 3] = tmp1
+        tmp3 = np.copy(copy[:, 2])
+        copy[:, 0] = copy[:, 5]
+        copy[:, 1] = copy[:, 4]
+        copy[:, 2] = copy[:, 3] 
+        copy[:, 3] = tmp3
+        copy[:, 4] = tmp2
+        copy[:, 5] = tmp1
         return np.vstack((self.data['train'], copy))
 
     def eval(
@@ -74,10 +88,13 @@ class Dataset(object):
             if m == 'lhs':
                 tmp1 = torch.clone(q[:, 0])
                 tmp2 = torch.clone(q[:,1])
-                q[:, 0] = q[:, 3]
-                q[:, 3] = tmp1
-                q[:, 1] = q[:, 2]
-                q[:, 2] = tmp2
+                tmp3 = torch.clone(q[:,1])
+                q[:, 0] = q[:, 5]
+                q[:, 5] = tmp1
+                q[:, 1] = q[:, 4]
+                q[:, 4] = tmp2
+                q[:, 2] = q[:, 3]
+                q[:, 3] = tmp3
             ranks = model.get_ranking(q, self.to_skip[m], batch_size=500)
 
             if log_result:
@@ -98,4 +115,4 @@ class Dataset(object):
         return mean_reciprocal_rank, hits_at
 
     def get_shape(self):
-        return self.n_entities, self.n_predicates, self.n_entities, self.n_timestamp
+        return self.n_entities, self.n_predicates, self.n_entities, self.time, self.date, self.day
