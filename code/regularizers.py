@@ -3,7 +3,7 @@ from typing import Tuple
 
 import torch
 from torch import nn
-from loss import SupContrastive_Loss
+from ConLoss import SupContrastive_Loss
 
 class Regularizer(nn.Module, ABC):
     @abstractmethod
@@ -105,9 +105,9 @@ class DURA_W(Regularizer):
 
         return self.weight * norm / h.shape[0]
 
-class DURA_tmp(Regularizer):
+class L2_temp(Regularizer):
     def __init__(self, weight: float):
-        super(DURA_tmp, self).__init__()
+        super(L2_temp, self).__init__()
         self.weight = weight
         
     def forward(self, factors):
@@ -119,13 +119,14 @@ class DURA_tmp(Regularizer):
     
 class ConR(Regularizer):
     def __init__(self, weight: float):
-        super(DURA_tmp, self).__init__()
+        super(ConR, self).__init__()
         self.weight = weight
-        con_loss = SupContrastive_Loss(tau = 1.0)
+        self.con_loss = SupContrastive_Loss(tau = 1.0)
         
     def forward(self, factors):
         norm = 0
         for factor in factors:
-            q, t = factor
-            norm += torch.sum(t**2 + q**2)
+            q, t, q_label, t_label = factor
+            norm += self.con_loss(q_label, q)
+            norm += self.con_loss(t_label, t)
         return self.weight * norm / t.shape[0]

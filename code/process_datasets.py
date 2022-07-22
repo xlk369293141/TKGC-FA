@@ -20,13 +20,23 @@ def prepare_dataset(path, name):
     Also create to_skip_lhs / to_skip_rhs for filtered metrics and
     rel_id / ent_id for analysis.
     """
+    KGC = ['WN18RR', 'FB237', 'YAGO3-10']
+    TKGC = ['ICEWS14', 'ICEWS05-15', 'GDELT']
+    if name in TKGC:
+        Tag = True
+    else:
+        Tag = False
     files = ['train', 'valid', 'test']
-    entities, relations = set(), set()
+    entities, relations, timestamps = set(), set(), set()
     for f in files:
         file_path = os.path.join(path, f)
         to_read = open(file_path, 'r')
         for line in to_read.readlines():
-            lhs, rel, rhs = line.strip().split('\t')
+            if Tag == True:
+                lhs, rel, rhs, timestamp = line.strip().split('\t')
+                timestamps.add(timestamp)
+            else:
+                lhs, rel, rhs = line.strip().split('\t')
             entities.add(lhs)
             entities.add(rhs)
             relations.add(rel)
@@ -51,24 +61,37 @@ def prepare_dataset(path, name):
         to_read = open(file_path, 'r')
         examples = []
         for line in to_read.readlines():
-            lhs, rel, rhs = line.strip().split('\t')
-            try:
-                examples.append([entities_to_id[lhs], relations_to_id[rel], entities_to_id[rhs]])
-            except ValueError:
-                continue
+            if Tag == False:
+                lhs, rel, rhs = line.strip().split('\t')
+                try:
+                    examples.append([entities_to_id[lhs], relations_to_id[rel], entities_to_id[rhs]])
+                except ValueError:
+                    continue
+            else:
+                lhs, rel, rhs, timestamp = line.strip().split('\t')
+                year, month, day = timestamp.split('-')
+                try:
+                    examples.append([entities_to_id[lhs], relations_to_id[rel], entities_to_id[rhs], year, month, day])
+                except ValueError:
+                    continue
+                 
         out = open(Path(DATA_PATH) / name / (f + '.pickle'), 'wb')
         pickle.dump(np.array(examples).astype('uint64'), out)
         out.close()
 
     print("creating filtering lists")
-
-    # create filtering files
+    # (Undetermined, how to filter candidate)
     to_skip = {'lhs': defaultdict(set), 'rhs': defaultdict(set)}
     for f in files:
         examples = pickle.load(open(Path(DATA_PATH) / name / (f + '.pickle'), 'rb'))
-        for lhs, rel, rhs in examples:
-            to_skip['lhs'][(rhs, rel + n_relations)].add(lhs)  # reciprocals
-            to_skip['rhs'][(lhs, rel)].add(rhs)
+        if Tag == False:
+            for lhs, rel, rhs in examples:
+                to_skip['lhs'][(rhs, rel + n_relations)].add(lhs)  # reciprocals
+                to_skip['rhs'][(lhs, rel)].add(rhs)            
+        else:
+            for lhs, rel, rhs, year, month, day in examples:
+                to_skip['lhs'][(rhs, rel + n_relations)].add(lhs)  # reciprocals
+                to_skip['rhs'][(lhs, rel)].add(rhs)
 
     to_skip_final = {'lhs': {}, 'rhs': {}}
     for kk, skip in to_skip.items():
@@ -85,12 +108,18 @@ def prepare_dataset(path, name):
         'rhs': np.zeros(n_entities),
         'both': np.zeros(n_entities)
     }
-
-    for lhs, rel, rhs in examples:
-        counters['lhs'][lhs] += 1
-        counters['rhs'][rhs] += 1
-        counters['both'][lhs] += 1
-        counters['both'][rhs] += 1
+    if Tag == False:
+        for lhs, rel, rhs in examples:
+            counters['lhs'][lhs] += 1
+            counters['rhs'][rhs] += 1
+            counters['both'][lhs] += 1
+            counters['both'][rhs] += 1    
+    else:
+        for lhs, rel, rhs, year, month, day in examples:
+            counters['lhs'][lhs] += 1
+            counters['rhs'][rhs] += 1
+            counters['both'][lhs] += 1
+            counters['both'][rhs] += 1
     for k, v in counters.items():
         counters[k] = v / np.sum(v)
     out = open(Path(DATA_PATH) / name / 'probas.pickle', 'wb')
@@ -99,7 +128,8 @@ def prepare_dataset(path, name):
 
 
 if __name__ == "__main__":
-    datasets = ['WN18RR', 'FB237', 'YAGO3-10']
+    # datasets = ['WN18RR', 'FB237', 'YAGO3-10']
+    datasets = ['ICEWS14', 'ICEWS05-15', 'GDELT']  
     for d in datasets:
         print("Preparing dataset {}".format(d))
         try:

@@ -11,7 +11,7 @@ from models import *
 from regularizers import *
 from optimizers import KBCOptimizer
 
-datasets = ['WN18RR', 'FB237', 'YAGO3-10']
+datasets = ['WN18RR', 'FB237', 'YAGO3-10', 'ICEWS14', 'ICEWS05-15', 'GDELT']
 
 parser = argparse.ArgumentParser(
     description="Tensor Factorization for Knowledge Graph Completion"
@@ -106,7 +106,7 @@ if args.do_ce_weight:
 else:
     ce_weight = None
 
-print(dataset.get_shape())
+print("All triplets:\t", dataset.get_shape())
 
 model = None
 regularizer = None
@@ -142,7 +142,7 @@ def avg_both(mrrs: Dict[str, float], hits: Dict[str, torch.FloatTensor]):
 
 cur_loss = 0
 
-if args.checkpoint is not '':
+if args.checkpoint != '':
     model.load_state_dict(torch.load(os.path.join(args.checkpoint, 'checkpoint'), map_location='cuda:0'))
 
 if args.do_train:
