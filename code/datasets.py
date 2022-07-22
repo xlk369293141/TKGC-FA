@@ -5,6 +5,8 @@ import os
 import numpy as np
 import torch
 from models import KBCModel
+from datetime import datetime
+from dateutil import relativedelta
 
 class Dataset(object):
     def __init__(self, data_path: str, name: str):
@@ -25,11 +27,26 @@ class Dataset(object):
         self.n_entities = int(max(maxis[0], maxis[2]) + 1)
         self.n_predicates = int(maxis[1] + 1)
         self.n_predicates *= 2
-        if self.Tag == True:
-            minis = np.min(self.data['train'], axis=0)
-            self.n_year = int(maxis[3]-minis[3]+1)
-            self.n_moth = int(maxis[4]-minis[4]+1)
-            self.n_day = int(maxis[5]-minis[5]+1)
+        self.Date = self.data['train'][3] #日期列
+        date_flag=0
+        for date in self.Date:
+            date_flag=date_flag+1
+            self.datelist[date_flag]=datetime.strptime(date, "%Y-%m-%d")  #str to time 
+        oldest = min(self.datetime_list)
+        youngest = max(self.datetime_list)
+        delta = relativedelta.relativedelta(youngest, oldest)#日期差
+        print(delta.years, 'Years,', delta.months, 'months,', delta.days, 'days')
+        
+
+
+        # if self.Tag == True:
+        #     minis = np.min(self.data['train'], axis=0)
+        #     self.n_year_1 = int(maxis[3])
+        #     self.n_month_1 = int(maxis[4])
+        #     self.n_day_1 = int(maxis[5]1)
+        #     self.n_year_2 = int(minis[3])
+        #     self.n_month_2 = int(minis[4])
+        #     self.n_day_2 = int(minis[5]1)
 
         inp_f = open(os.path.join(self.root, 'to_skip.pickle'), 'rb')
         self.to_skip: Dict[str, Dict[Tuple[int, int], List[int]]] = pickle.load(inp_f)
@@ -106,6 +123,6 @@ class Dataset(object):
 
     def get_shape(self):
         if self.Tag == True:
-            return self.n_entities, self.n_predicates, self.n_entities, self.n_year, self.n_moth, self.n_day
+            return self.n_entities, self.n_predicates, self.n_entities, self.n_year, self.n_month, self.n_day
         else:
             return self.n_entities, self.n_predicates, self.n_entities
