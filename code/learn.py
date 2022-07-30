@@ -73,6 +73,16 @@ parser.add_argument(
     help="decay rate for second moment estimate in Adam"
 )
 
+parser.add_argument(
+    '--ratio', default=0.64, type=float,
+    help="the ratio of temporal embedding dimension"
+)
+
+parser.add_argument(
+    '--drop_out', default=0.4, type=float,
+    help="dropout rate for all facts score"
+)
+
 parser.add_argument('-train', '--do_train', action='store_true')
 parser.add_argument('-test', '--do_test', action='store_true')
 parser.add_argument('-save', '--do_save', action='store_true')
@@ -106,11 +116,12 @@ if args.do_ce_weight:
 else:
     ce_weight = None
 
-print("All triplets:\t", dataset.get_shape())
-
 model = None
 regularizer = None
-exec('model = '+args.model+'(dataset.get_shape(), args.rank, args.init)')
+if dataset.Tag == False:
+    exec('model = '+args.model+'(dataset.get_shape(), args.rank, args.init)')
+else:
+    exec('model = '+args.model+'(dataset.get_shape(), args.rank, args.init, args.ratio, args.dropout)')
 exec('regularizer = '+args.regularizer+'(args.reg)')
 regularizer = [regularizer, N3(args.reg)]
 
@@ -168,6 +179,7 @@ if args.do_train:
                 log_file.flush()
 
         test = avg_both(*dataset.eval(model, 'test', 50000))
+        log_file.write("\t TEST: {}\n".format(test))
         print("\t TEST : ", test)
 
 if args.do_save:
@@ -182,5 +194,5 @@ if args.do_save:
         np.save(os.path.join(save_path, 'relation_embedding.npy'), embeddings[1].weight.detach().cpu().numpy())
         np.save(os.path.join(save_path, 'tail_entity_embedding.npy'), embeddings[2].weight.detach().cpu().numpy())
     else:
-        print('SAVE ERROR!')
+        print('SAVE ERROR!, No Static Embedding.')
 

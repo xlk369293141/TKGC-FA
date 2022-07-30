@@ -24,20 +24,6 @@ class Fro(Regularizer):
                 )
         return norm / factors[0][0].shape[0]
 
-class N3(Regularizer):
-    def __init__(self, weight: float):
-        super(N3, self).__init__()
-        self.weight = weight
-
-    def forward(self, factors):
-        norm = 0
-        for factor in factors:
-            for f in factor:
-                norm += self.weight * torch.sum(
-                    torch.abs(f) ** 3
-                ) / f.shape[0]
-        return norm
-
 class L2(Regularizer):
     def __init__(self, weight: float):
         super(L2, self).__init__()
@@ -74,6 +60,20 @@ class NA(Regularizer):
     def forward(self, factors):
         return torch.Tensor([0.0]).cuda()
 
+class N3(Regularizer):
+    def __init__(self, weight: float):
+        super(N3, self).__init__()
+        self.weight = weight
+
+    def forward(self, factors):
+        norm = 0
+        for factor in factors:
+            for f in factor:
+                norm += self.weight * torch.sum(
+                    torch.abs(f) ** 3
+                ) / f.shape[0]
+        return norm
+    
 class DURA(Regularizer):
     def __init__(self, weight: float):
         super(DURA, self).__init__()

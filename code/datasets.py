@@ -5,12 +5,13 @@ import os
 import numpy as np
 import torch
 from models import KBCModel
-from datetime import datetime
+import datetime
 from dateutil import relativedelta
 
 class Dataset(object):
     def __init__(self, data_path: str, name: str):
         self.root = os.path.join(data_path, name)
+        print(name)
         TKGC = ['ICEWS14', 'ICEWS05-15', 'GDELT']
         if name in TKGC:
             self.Tag = True
@@ -27,29 +28,12 @@ class Dataset(object):
         self.n_entities = int(max(maxis[0], maxis[2]) + 1)
         self.n_predicates = int(maxis[1] + 1)
         self.n_predicates *= 2
-        self.Date = self.data['train'][3] #日期列
-        date_flag=0
-        for date in self.Date:
-            date_flag=date_flag+1
-            self.datelist[date_flag]=datetime.strptime(date, "%Y-%m-%d")  #str to time 
-        oldest = min(self.datetime_list)
-        youngest = max(self.datetime_list)
-        delta = relativedelta.relativedelta(youngest, oldest)#日期差
-        print(delta.years, 'Years,', delta.months, 'months,', delta.days, 'days')
         
-
-
-        # if self.Tag == True:
-        #     minis = np.min(self.data['train'], axis=0)
-        #     self.n_year_1 = int(maxis[3])
-        #     self.n_month_1 = int(maxis[4])
-        #     self.n_day_1 = int(maxis[5]1)
-        #     self.n_year_2 = int(minis[3])
-        #     self.n_month_2 = int(minis[4])
-        #     self.n_day_2 = int(minis[5]1)
-
         inp_f = open(os.path.join(self.root, 'to_skip.pickle'), 'rb')
-        self.to_skip: Dict[str, Dict[Tuple[int, int], List[int]]] = pickle.load(inp_f)
+        if self.Tag == True:
+            self.to_skip: Dict[str, Dict[Tuple[int, int, int, int, int], List[int]]] = pickle.load(inp_f)
+        else:
+            self.to_skip: Dict[str, Dict[Tuple[int, int], List[int]]] = pickle.load(inp_f)
         inp_f.close()
 
     def get_weight(self):
@@ -122,7 +106,16 @@ class Dataset(object):
         return mean_reciprocal_rank, hits_at
 
     def get_shape(self):
-        if self.Tag == True:
-            return self.n_entities, self.n_predicates, self.n_entities, self.n_year, self.n_month, self.n_day
-        else:
-            return self.n_entities, self.n_predicates, self.n_entities
+        if self.Tag == True:            
+            Years = self.data['train'][:,3]
+            Months = self.data['train'][:,4]
+            Days = self.data['train'][:,5]
+            datelist = []
+            for i in range(len(Years)):
+                datelist.append(datetime.date(Years[i], Months[i], Days[i]))
+            oldest = min(datelist)
+            youngest = max(datelist)
+            print("The start date:", oldest, "\tThe end date:", youngest)
+            delta = relativedelta.relativedelta(youngest, oldest)#日期差
+            print("Time Span: \t", delta.years, 'Years,', delta.months, 'months,', delta.days, 'days')
+        return self.n_entities, self.n_predicates, self.n_entities

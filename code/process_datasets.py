@@ -90,8 +90,8 @@ def prepare_dataset(path, name):
                 to_skip['rhs'][(lhs, rel)].add(rhs)            
         else:
             for lhs, rel, rhs, year, month, day in examples:
-                to_skip['lhs'][(rhs, rel + n_relations)].add(lhs)  # reciprocals
-                to_skip['rhs'][(lhs, rel)].add(rhs)
+                to_skip['lhs'][(rhs, rel + n_relations, year, month, day)].add(lhs)  # reciprocals
+                to_skip['rhs'][(lhs, rel, year, month, day)].add(rhs)
 
     to_skip_final = {'lhs': {}, 'rhs': {}}
     for kk, skip in to_skip.items():
