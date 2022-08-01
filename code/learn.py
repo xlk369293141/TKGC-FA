@@ -41,7 +41,7 @@ parser.add_argument(
     help="Number of epochs."
 )
 parser.add_argument(
-    '--valid', default=3, type=float,
+    '--valid', default=10, type=float,
     help="Number of epochs before valid."
 )
 parser.add_argument(
@@ -79,7 +79,7 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    '--drop_out', default=0.4, type=float,
+    '--dropout', default=0.4, type=float,
     help="dropout rate for all facts score"
 )
 

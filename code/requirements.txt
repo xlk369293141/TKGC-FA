@@ -1,0 +1,4 @@
+Python == 3.8.12
+PyTorch == 1.9.0 + cu111
+NumPy == 1.19.2
+tqdm == 4.62.3
