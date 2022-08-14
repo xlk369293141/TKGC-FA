@@ -256,8 +256,8 @@ class ComplEx_DE(KBCModel):
         lhs = self.embeddings[0](x[:, 0])
         rel = self.embeddings[1](x[:, 1])
         rhs = self.embeddings[0](x[:, 2])
-        lhs = lhs * self.get_time_embedd(x[:, 0], x[:,3], x[:,4], x[:,5])
-        rhs = rhs * self.get_time_embedd(x[:, 2], x[:,3], x[:,4], x[:,5])
+        lhs = lhs * self.get_time_embedd(x[:, 0], x[:,3], x[:,4], x[:,5]) + 1e-8
+        rhs = rhs * self.get_time_embedd(x[:, 2], x[:,3], x[:,4], x[:,5]) + 1e-8
         
         lhs = lhs[:, :self.rank], lhs[:, self.rank:]
         rhs = rhs[:, :self.rank], rhs[:, self.rank:]
@@ -287,7 +287,7 @@ class TuckER_DE(KBCModel):
         self.init_size = init_size
         self.W = torch.nn.Parameter(torch.tensor(np.random.uniform(-1, 1, (rank, rank, rank)), 
                                     dtype=torch.float, device="cuda", requires_grad=True))
-        self.W.data *= init_size
+        # self.W.data *= init_size
         self.embeddings = nn.ModuleList([
             nn.Embedding(s, rank, sparse=True)
             for s in sizes[:2]
@@ -334,8 +334,8 @@ class TuckER_DE(KBCModel):
         lhs = self.embeddings[0](x[:, 0])
         rel = self.embeddings[1](x[:, 1])
         rhs = self.embeddings[0](x[:, 2])
-        lhs = lhs * self.get_time_embedd(x[:, 0], x[:,3], x[:,4], x[:,5])
-        rhs = rhs * self.get_time_embedd(x[:, 2], x[:,3], x[:,4], x[:,5])
+        lhs = lhs * self.get_time_embedd(x[:, 0], x[:,3], x[:,4], x[:,5]) + 1e-8
+        rhs = rhs * self.get_time_embedd(x[:, 2], x[:,3], x[:,4], x[:,5]) + 1e-8
         
         query = lhs.view(-1, 1, lhs.size(1))
 
