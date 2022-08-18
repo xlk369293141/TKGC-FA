@@ -104,18 +104,6 @@ class DURA_W(Regularizer):
             norm += 1.5 * torch.sum(h**2 * r**2 + t**2 * r**2)
 
         return self.weight * norm / h.shape[0]
-
-class L2_temp(Regularizer):
-    def __init__(self, weight: float):
-        super(L2_temp, self).__init__()
-        self.weight = weight
-        
-    def forward(self, factors):
-        norm = 0
-        for factor in factors:
-            q, t = factor
-            norm += torch.sum(t**2 + q**2)
-        return self.weight * norm / t.shape[0]
     
 class ConR(Regularizer):
     def __init__(self, weight: float):

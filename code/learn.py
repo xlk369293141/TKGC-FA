@@ -45,8 +45,12 @@ parser.add_argument(
     help="Number of epochs before valid."
 )
 parser.add_argument(
-    '--rank', default=1000, type=int,
-    help="Factorization rank."
+    '--rank1', default=200, type=int,
+    help="Factorization rank for entity."
+)
+parser.add_argument(
+    '--rank2', default=200, type=int,
+    help="Factorization rank for relation or timestamp."
 )
 parser.add_argument(
     '--batch_size', default=1000, type=int,
@@ -79,8 +83,8 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    '--dropout', default=0.4, type=float,
-    help="dropout rate for all facts score"
+    '--dropout', default=0.1, type=float,
+    help="dropout rate for fact network"
 )
 
 parser.add_argument('-train', '--do_train', action='store_true')
@@ -115,15 +119,17 @@ if args.do_ce_weight:
     ce_weight = torch.Tensor(dataset.get_weight()).cuda()
 else:
     ce_weight = None
+    
+dropouts = tuple(args.dropout for i in range(3))
 
 model = None
 regularizer = None
 if dataset.Tag == False:
-    exec('model = '+args.model+'(dataset.get_shape(), args.rank, args.init)')
+    exec('model = '+args.model+'(dataset.get_shape(), dropouts, args.rank1, args.init)')
 else:
-    exec('model = '+args.model+'(dataset.get_shape(), args.rank, args.init, args.ratio, args.dropout)')
+    exec('model = '+args.model+'(dataset.get_shape(), dropouts, args.rank1, args.rank2, args.init, args.ratio)')
 exec('regularizer = '+args.regularizer+'(args.reg)')
-regularizer = [regularizer, N3(args.reg)]
+regularizer = [regularizer, NA(args.reg)]
 
 device = 'cuda'
 model.to(device)
@@ -164,16 +170,20 @@ if args.do_train:
             cur_loss = optimizer.epoch(examples, e=e, weight=ce_weight)
 
             if (e + 1) % args.valid == 0:
-                valid, test, train = [
+                # valid, test, train = [
+                #     avg_both(*dataset.eval(model, split, -1 if split != 'train' else 50000))
+                #     for split in ['valid', 'test', 'train']
+                # ]
+                # print("\t TRAIN: ", train)
+                # log_file.write("\t TRAIN: {}\n".format(train))
+                valid, test = [
                     avg_both(*dataset.eval(model, split, -1 if split != 'train' else 50000))
-                    for split in ['valid', 'test', 'train']
+                    for split in ['valid', 'test']
                 ]
-
-                print("\t TRAIN: ", train)
                 print("\t VALID: ", valid)
 
                 log_file.write("Epoch: {}\n".format(e+1))
-                log_file.write("\t TRAIN: {}\n".format(train))
+
                 log_file.write("\t VALID: {}\n".format(valid))
 
                 log_file.flush()

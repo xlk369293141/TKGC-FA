@@ -33,8 +33,8 @@ class KBCModel(nn.Module, ABC):
                     for i, query in enumerate(these_queries):
                         if len(list(filters.keys())[0]) == 2:
                             filter_out = filters[(query[0].item(), query[1].item())]
-                        elif len(list(filters.keys())[0]) == 5:
-                            filter_out = filters[(query[0].item(), query[1].item(), query[3].item(), query[4].item(), query[5].item())]
+                        elif len(list(filters.keys())[0]) == 3:
+                            filter_out = filters[(query[0].item(), query[1].item(), query[3].item())]
                         else:
                             raise ValueError("The Query Component should be 2 or 5, but got ", len(list(filters.keys())[0]))
                         filter_out += [queries[b_begin + i, 2].item()]   # Add the tail of this (b_begin + i) query
@@ -349,6 +349,142 @@ class TuckER_DE(KBCModel):
         # scores = F.dropout(scores, p=self.params.dropout, training=self.training)
         return (
                     torch.mm(query, to_score.transpose(1,0))
+                ), [
+                   (torch.sqrt(lhs ** 2), torch.sqrt(rel ** 2), torch.sqrt(rhs ** 2))
+               ]
+                
+class TuckER_RE(KBCModel):
+    def __init__(
+            self, sizes: Tuple[int, int, int], rank: int,
+            init_size: float = 1e-3, ratio: float = 0.5, dropout: float = 0.3
+    ):
+        super(TuckER_RE, self).__init__()
+        self.sizes = sizes
+        self.rank = rank
+        self.init_size = init_size
+        self.W = torch.nn.Parameter(torch.tensor(np.random.uniform(-1, 1, (rank, rank, rank)), 
+                                    dtype=torch.float, device="cuda", requires_grad=True))
+        # self.W.data *= init_size
+        self.embeddings = nn.ModuleList([
+            nn.Embedding(s, rank, sparse=True)
+            for s in sizes[:2]
+        ])
+        self.embeddings[0].weight.data *= init_size
+        self.embeddings[1].weight.data *= init_size
+
+        self.t_emb_dim = int(ratio * rank)
+        
+        self.create_time_embedds()
+        self.activate_func = torch.sin  # torch.exp
+        
+    def create_time_embedds(self):
+        self.m_freq = nn.Embedding(self.sizes[0], self.t_emb_dim)
+        self.d_freq = nn.Embedding(self.sizes[0], self.t_emb_dim)
+        self.y_freq = nn.Embedding(self.sizes[0], self.t_emb_dim)
+
+        self.m_freq.weight.data *= self.init_size
+        self.d_freq.weight.data *= self.init_size
+        self.y_freq.weight.data *= self.init_size
+                                
+        self.m_phi = nn.Embedding(self.sizes[0], self.t_emb_dim)
+        self.d_phi = nn.Embedding(self.sizes[0], self.t_emb_dim)
+        self.y_phi = nn.Embedding(self.sizes[0], self.t_emb_dim)
+
+        self.m_phi.weight.data *= self.init_size
+        self.d_phi.weight.data *= self.init_size
+        self.y_phi.weight.data *= self.init_size
+    
+    def get_time_embedd(self, entities, year, month, day):
+        year = year.view(-1,1)
+        month = month.view(-1,1)
+        day = day.view(-1,1)
+        y = self.activate_func(self.y_freq(entities)*year + self.y_phi(entities))
+        m = self.activate_func(self.m_freq(entities)*month + self.m_phi(entities))
+        d = self.activate_func(self.d_freq(entities)*day + self.d_phi(entities))
+        
+        pad_dim = self.rank - self.t_emb_dim
+        pad_emb = torch.ones([entities.size(0), pad_dim]).cuda()
+        time_emb = torch.cat((pad_emb, (y+m+d)[:, :self.t_emb_dim]), 1)
+        return time_emb
+    
+    def forward(self, x):
+        lhs = self.embeddings[0](x[:, 0])
+        rel = self.embeddings[1](x[:, 1])
+        rhs = self.embeddings[0](x[:, 2])
+        rel = rel * self.get_time_embedd(x[:, 1], x[:,3], x[:,4], x[:,5]) + 1e-8
+        
+        query = lhs.view(-1, 1, lhs.size(1))
+
+        W_mat = torch.mm(rel, self.W.view(rel.size(1), -1))
+        W_mat = W_mat.view(-1, lhs.size(1), lhs.size(1))
+
+        query = torch.bmm(query, W_mat)
+        query = query.view(-1, lhs.size(1))      
+        
+        to_score = self.embeddings[0].weight
+        # scores = F.dropout(scores, p=self.params.dropout, training=self.training)
+        return (
+                    torch.mm(query, to_score.transpose(1,0))
+                ), [
+                   (torch.sqrt(lhs ** 2), torch.sqrt(rel ** 2), torch.sqrt(rhs ** 2))
+               ]
+                
+class TuckER_DFT(KBCModel):
+    def __init__(
+            self, sizes: Tuple[int, int, int], dropouts: Tuple[float, float, float], rank1: int, rank2: int,
+            init_size: float = 1e-3, ratio: float = 0.5
+    ):
+        super(TuckER_DFT, self).__init__()
+        self.sizes = sizes
+        self.rank1 = rank1
+        self.rank2 = rank2
+        self.init_size = init_size
+        self.t_emb_dim = int(ratio * rank2)
+        self.W = torch.nn.Parameter(torch.tensor(np.random.uniform(-1, 1, (rank1, rank2, rank1)), 
+                                    dtype=torch.float, device="cuda", requires_grad=True))
+        # self.W.data *= init_size
+        self.bn0 = torch.nn.BatchNorm1d(rank1)
+        self.bn1 = torch.nn.BatchNorm1d(rank1)
+        self.input_dropout = torch.nn.Dropout(dropouts[0])
+        self.hidden_dropout1 = torch.nn.Dropout(dropouts[1])
+        self.hidden_dropout2 = torch.nn.Dropout(dropouts[2])
+        
+        self.embeddings = nn.ModuleList([
+            nn.Embedding(s, rank, sparse=True)
+            for (s, rank) in zip(sizes[:3], [rank1, rank2, self.t_emb_dim])
+        ])
+        self.embeddings[0].weight.data *= init_size
+        self.embeddings[1].weight.data *= init_size
+        self.embeddings[2].weight.data *= init_size
+    
+    def get_time_embedd(self, timestamps):
+        pad_dim = self.rank2 - self.t_emb_dim
+        pad_emb = torch.ones([timestamps.size(0), pad_dim]).cuda()
+        temporal_relation_emb = torch.cat((pad_emb, timestamps), 1)
+        return temporal_relation_emb
+    
+    def forward(self, x):
+        lhs = self.embeddings[0](x[:, 0])
+        rel = self.embeddings[1](x[:, 1])
+        rhs = self.embeddings[0](x[:, 2])
+        tim = self.embeddings[2](x[:, 3])
+        
+        x = self.bn0(lhs)
+        x = self.input_dropout(x)
+        x = x.view(-1, 1, lhs.size(1))
+        
+        temporal_rel = rel * self.get_time_embedd(tim)
+        W_mat = torch.mm(temporal_rel, self.W.view(temporal_rel.size(1), -1))
+        W_mat = W_mat.view(-1, lhs.size(1), lhs.size(1))
+        W_mat = self.hidden_dropout1(W_mat)
+
+        x = torch.bmm(x, W_mat)
+        x = x.view(-1, lhs.size(1))      
+        x = self.bn1(x)
+        x = self.hidden_dropout2(x)
+        to_score = self.embeddings[0].weight
+        return (
+                    torch.mm(x, to_score.transpose(1,0))
                 ), [
                    (torch.sqrt(lhs ** 2), torch.sqrt(rel ** 2), torch.sqrt(rhs ** 2))
                ]

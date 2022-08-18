@@ -6,7 +6,7 @@ import pickle
 import numpy as np
 
 from collections import defaultdict
-
+from datetime import datetime
 DATA_PATH = "../data"
 
 def prepare_dataset(path, name):
@@ -34,7 +34,7 @@ def prepare_dataset(path, name):
         for line in to_read.readlines():
             if Tag == True:
                 lhs, rel, rhs, timestamp = line.strip().split('\t')
-                timestamps.add(timestamp)
+                timestamps.add(datetime.strptime(timestamp, '%Y-%m-%d'))
             else:
                 lhs, rel, rhs = line.strip().split('\t')
             entities.add(lhs)
@@ -45,15 +45,26 @@ def prepare_dataset(path, name):
     entities_to_id = {x: i for (i, x) in enumerate(sorted(entities))}
     relations_to_id = {x: i for (i, x) in enumerate(sorted(relations))}
     print("{} entities and {} relations".format(len(entities), len(relations)))
+    if Tag == True:    
+        timestamps_to_id = {x.strftime('%Y-%m-%d'): i for (i, x) in enumerate(sorted(timestamps))}
+        print("{} timestamps, from {} to {}".format(len(timestamps), min(timestamps), max(timestamps)))
     n_relations = len(relations)
     n_entities = len(entities)
+    n_timestamps = len(timestamps)
     os.makedirs(os.path.join(DATA_PATH, name))
     # write ent to id / rel to id
-    for (dic, f) in zip([entities_to_id, relations_to_id], ['ent_id', 'rel_id']):
-        ff = open(os.path.join(DATA_PATH, name, f), 'w+')
-        for (x, i) in dic.items():
-            ff.write("{}\t{}\n".format(x, i))
-        ff.close()
+    if Tag == True:
+        for (dic, f) in zip([entities_to_id, relations_to_id, timestamps_to_id], ['ent_id', 'rel_id', 'time_id']):
+            ff = open(os.path.join(DATA_PATH, name, f), 'w+')
+            for (x, i) in dic.items():
+                ff.write("{}\t{}\n".format(x, i))
+            ff.close()
+    else:
+        for (dic, f) in zip([entities_to_id, relations_to_id], ['ent_id', 'rel_id']):
+            ff = open(os.path.join(DATA_PATH, name, f), 'w+')
+            for (x, i) in dic.items():
+                ff.write("{}\t{}\n".format(x, i))
+            ff.close()
 
     # map train/test/valid with the ids
     for f in files:
@@ -69,9 +80,9 @@ def prepare_dataset(path, name):
                     continue
             else:
                 lhs, rel, rhs, timestamp = line.strip().split('\t')
-                year, month, day = timestamp.split('-')
+                # year, month, day = timestamp.split('-')
                 try:
-                    examples.append([entities_to_id[lhs], relations_to_id[rel], entities_to_id[rhs], year, month, day])
+                    examples.append([entities_to_id[lhs], relations_to_id[rel], entities_to_id[rhs], timestamps_to_id[timestamp]])
                 except ValueError:
                     continue
                  
@@ -89,9 +100,9 @@ def prepare_dataset(path, name):
                 to_skip['lhs'][(rhs, rel + n_relations)].add(lhs)  # reciprocals
                 to_skip['rhs'][(lhs, rel)].add(rhs)            
         else:
-            for lhs, rel, rhs, year, month, day in examples:
-                to_skip['lhs'][(rhs, rel + n_relations, year, month, day)].add(lhs)  # reciprocals
-                to_skip['rhs'][(lhs, rel, year, month, day)].add(rhs)
+            for lhs, rel, rhs, timestamp in examples:
+                to_skip['lhs'][(rhs, rel + n_relations, timestamp)].add(lhs)  # reciprocals
+                to_skip['rhs'][(lhs, rel, timestamp)].add(rhs)
 
     to_skip_final = {'lhs': {}, 'rhs': {}}
     for kk, skip in to_skip.items():
@@ -115,7 +126,7 @@ def prepare_dataset(path, name):
             counters['both'][lhs] += 1
             counters['both'][rhs] += 1    
     else:
-        for lhs, rel, rhs, year, month, day in examples:
+        for lhs, rel, rhs, timestamp in examples:
             counters['lhs'][lhs] += 1
             counters['rhs'][rhs] += 1
             counters['both'][lhs] += 1

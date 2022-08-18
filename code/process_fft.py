@@ -54,7 +54,7 @@ def process_fft(path, name):
     youngest = max(datelist)
     delta = (youngest-oldest).days
     print(delta)
-
+    
 if __name__ == "__main__":
     # datasets = ['WN18RR', 'FB237', 'YAGO3-10']
     datasets = ['ICEWS14', 'ICEWS05-15', 'GDELT']  
