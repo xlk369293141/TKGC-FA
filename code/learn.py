@@ -170,22 +170,10 @@ if args.do_train:
             cur_loss = optimizer.epoch(examples, e=e, weight=ce_weight)
 
             if (e + 1) % args.valid == 0:
-                # valid, test, train = [
-                #     avg_both(*dataset.eval(model, split, -1 if split != 'train' else 50000))
-                #     for split in ['valid', 'test', 'train']
-                # ]
-                # print("\t TRAIN: ", train)
-                # log_file.write("\t TRAIN: {}\n".format(train))
-                valid, test = [
-                    avg_both(*dataset.eval(model, split, -1 if split != 'train' else 50000))
-                    for split in ['valid', 'test']
-                ]
+                valid = avg_both(*dataset.eval(model, 'valid', -1))
                 print("\t VALID: ", valid)
-
                 log_file.write("Epoch: {}\n".format(e+1))
-
                 log_file.write("\t VALID: {}\n".format(valid))
-
                 log_file.flush()
 
         test = avg_both(*dataset.eval(model, 'test', 50000))
@@ -200,9 +188,9 @@ if args.do_save:
         np.save(os.path.join(save_path, 'entity_embedding.npy'), embeddings[0].weight.detach().cpu().numpy())
         np.save(os.path.join(save_path, 'relation_embedding.npy'), embeddings[1].weight.detach().cpu().numpy())
     elif len_emb == 3:
-        np.save(os.path.join(save_path, 'head_entity_embedding.npy'), embeddings[0].weight.detach().cpu().numpy())
+        np.save(os.path.join(save_path, 'entity_embedding.npy'), embeddings[0].weight.detach().cpu().numpy())
         np.save(os.path.join(save_path, 'relation_embedding.npy'), embeddings[1].weight.detach().cpu().numpy())
-        np.save(os.path.join(save_path, 'tail_entity_embedding.npy'), embeddings[2].weight.detach().cpu().numpy())
+        np.save(os.path.join(save_path, 'time_embedding.npy'), embeddings[2].weight.detach().cpu().numpy())
     else:
         print('SAVE ERROR!, No Static Embedding.')
 
