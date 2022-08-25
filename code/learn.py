@@ -61,6 +61,14 @@ parser.add_argument(
     help="Regularization weight"
 )
 parser.add_argument(
+    '--reg_t', default=0, type=float,
+    help="Time Regularization weight"
+)
+parser.add_argument(
+    '--p', default=2, type=int,
+    help="p-norm of Time Regularization"
+)
+parser.add_argument(
     '--init', default=1e-3, type=float,
     help="Initial scale"
 )
@@ -129,8 +137,11 @@ if dataset.Tag == False:
 else:
     exec('model = '+args.model+'(dataset.get_shape(), dropouts, args.rank1, args.rank2, args.init, args.ratio)')
 exec('regularizer = '+args.regularizer+'(args.reg)')
-regularizer = [regularizer, NA(args.reg)]
-
+if args.reg_t>0:
+    regularizer = [regularizer, TimeReg(args.reg_t, args.p)]
+else:
+    regularizer = [regularizer, None]
+    
 device = 'cuda'
 model.to(device)
 for reg in regularizer:

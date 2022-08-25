@@ -14,7 +14,7 @@ class KBCOptimizer(object):
     ):
         self.model = model
         self.regularizer = regularizer[0]
-        self.regularizer2 = regularizer[1]
+        self.regularizer_t = regularizer[1]
         self.optimizer = optimizer
         self.batch_size = batch_size
         self.verbose = verbose
@@ -47,9 +47,10 @@ class KBCOptimizer(object):
 
                 l_fit = loss(predictions, truth)
                 l_reg = self.regularizer.forward(factors)
-
                 l = l_fit + l_reg
-
+                # l_t = self.regularizer_t.forward(self.model.embeddings[2].weight)
+                # l = l_fit + l_reg + l_t
+                
                 self.optimizer.zero_grad()
                 l.backward()
 
@@ -57,5 +58,12 @@ class KBCOptimizer(object):
                 b_begin += self.batch_size
                 bar.update(input_batch.shape[0])
                 bar.set_postfix(loss=f'{l.item():.1f}', reg=f'{l_reg.item():.1f}')
-
+            
+            if self.regularizer_t is not None:
+                l_t = self.regularizer_t.forward(self.model.embeddings[2].weight)
+                self.optimizer.zero_grad()
+                l_t.backward()
+                self.optimizer.step()
+                bar.set_postfix(time_reg_loss=f'{l_t.item():.1f}')
+                
         return l

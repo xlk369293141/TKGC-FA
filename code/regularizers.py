@@ -118,3 +118,39 @@ class ConR(Regularizer):
             norm += self.con_loss(q_label, q)
             norm += self.con_loss(t_label, t)
         return self.weight * norm / t.shape[0]
+
+class TmpReg(Regularizer):
+    def __init__(self, weight: float):
+        super(TmpReg, self).__init__()
+        self.weight = weight
+
+    def forward(self, factors):
+        norm = 0
+        for factor in factors:
+            le, r_t, re = factor
+            q1 = torch.bmm(le, r_t)
+            # q1 = q1.view(-1, le.size(1))  
+            q2 = torch.bmm(re, r_t)
+            # q2 = q1.view(-1, le.size(1))  
+            norm +=  torch.sum(le**2 + re**2)
+            norm +=  torch.sum(q1**2 + q2**2)
+
+        return self.weight * norm / le.shape[0]
+    
+class TimeReg(Regularizer):
+    def __init__(self, weight: float, p: int):
+        super(TimeReg, self).__init__()
+        self.weight = weight
+        self.p = p
+        
+    def forward(self, tim):
+        norm = 0
+        time_diff = torch.empty(tim.size()).cuda()
+        for i in range(len(tim)):
+            if i > 0:
+                time_diff[i] = tim[i] - tim[i-1]
+            else: 
+                time_diff[i] = torch.zeros(1)
+        
+        norm += time_diff.pow(self.p).sum(dim=1).pow(1/self.p).sum()
+        return self.weight * norm / (tim.shape[0]-1)
