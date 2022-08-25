@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from turtle import forward
 from typing import Tuple
 
 import torch
@@ -118,3 +119,28 @@ class ConR(Regularizer):
             norm += self.con_loss(q_label, q)
             norm += self.con_loss(t_label, t)
         return self.weight * norm / t.shape[0]
+
+class T_DURA(Regularizer):
+    def __init__(self, weight: float):
+        super(T_DURA, self).__init__()
+        self.weight = weight
+
+    def forward(self, factors):
+        norm = 0
+
+        for factor in factors:
+            h, r, t, time_diff = factor
+            
+            # print(time_diff)
+            # print(torch.sum(time_diff))
+            norm += torch.sum(time_diff)
+            # print(norm)
+            # norm += torch.sum(t**2 + h**2) 
+            # print(norm)
+            # norm += torch.sum(h**2 * r**2 + t**2 * r**2)
+            # norm += torch.sum(h**2 * T**2 + t**2 * T**2 + r**2 * T**2)
+            # print(norm)
+        #print(norm)
+
+        return self.weight * torch.sqrt(torch.sqrt(norm + 1e-8))/ h.shape[0]   
+
