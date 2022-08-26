@@ -127,15 +127,17 @@ class TmpReg(Regularizer):
     def forward(self, factors):
         norm = 0
         for factor in factors:
-            le, r_t, re = factor
-            q1 = torch.bmm(le, r_t)
-            # q1 = q1.view(-1, le.size(1))  
-            q2 = torch.bmm(re, r_t)
-            # q2 = q1.view(-1, le.size(1))  
-            norm +=  torch.sum(le**2 + re**2)
-            norm +=  torch.sum(q1**2 + q2**2)
+            lhs, rel_t, rhs = factor
+            lhs = lhs.view(-1, 1, lhs.size(1))
+            q1 = torch.bmm(lhs, rel_t)
+            rhs = rhs.view(-1, 1, rhs.size(1))
+            q2 = torch.bmm(rhs, rel_t)
+            assert(q1.size() == q2.size())
+            
+            norm +=  0.5 * torch.sum(q1**2 + rhs**2)
+            norm +=  0.5 * torch.sum(lhs**2 + q2**2)
 
-        return self.weight * norm / le.shape[0]
+        return self.weight * norm / lhs.shape[0]
     
 class TimeReg(Regularizer):
     def __init__(self, weight: float, p: int):
@@ -145,12 +147,23 @@ class TimeReg(Regularizer):
         
     def forward(self, tim):
         norm = 0
-        time_diff = torch.empty(tim.size()).cuda()
-        for i in range(len(tim)):
-            if i > 0:
-                time_diff[i] = tim[i] - tim[i-1]
-            else: 
-                time_diff[i] = torch.zeros(1)
-        
+        time_diff = torch.diff(tim, dim=0)
+
         norm += time_diff.pow(self.p).sum(dim=1).pow(1/self.p).sum()
-        return self.weight * norm / (tim.shape[0]-1)
+        return self.weight * norm / time_diff.shape[0]
+    
+    
+class AttReg(Regularizer):
+    def __init__(self, weight: float):
+        super(AttReg, self).__init__()
+        self.weight = weight
+        self.att = ()
+        
+    def forward(self, factors):
+        norm = 0
+        for factor in factors:
+            lhs, rel_t, rhs = factor
+ 
+            rel_t = att(time)
+            
+        return self.weight * norm / lhs.shape[0]

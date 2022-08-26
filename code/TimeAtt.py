@@ -21,13 +21,13 @@ def get_freq_indices(method):
     return mapper
 
 class MultiSpectralAttentionLayer(torch.nn.Module):
-    def __init__(self, channel, dct_h, dct_w, reduction = 16, freq_sel_method = 'top16'):
+    def __init__(self, timestamps, query, reduction = 16, freq_sel_method = 'top16'):
         super(MultiSpectralAttentionLayer, self).__init__()
         self.reduction = reduction
         self.dct_h = dct_h
         self.dct_w = dct_w
 
-        mapper_x, mapper_y = get_freq_indices(freq_sel_method)
+        mapper = get_freq_indices(freq_sel_method)
         self.num_split = len(mapper_x)
         mapper_x = [temp_x * (dct_h // 7) for temp_x in mapper_x] 
         mapper_y = [temp_y * (dct_w // 7) for temp_y in mapper_y]
@@ -60,7 +60,7 @@ class MultiSpectralDCTLayer(nn.Module):
     """
     Generate dct filters
     """
-    def __init__(self, height, width, mapper_x, mapper_y, channel):
+    def __init__(self, timestamps, query):
         super(MultiSpectralDCTLayer, self).__init__()
         
         assert len(mapper_x) == len(mapper_y)
