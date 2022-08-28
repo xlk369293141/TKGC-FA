@@ -104,20 +104,6 @@ class DURA_W(Regularizer):
             norm += 1.5 * torch.sum(h**2 * r**2 + t**2 * r**2)
 
         return self.weight * norm / h.shape[0]
-    
-class ConR(Regularizer):
-    def __init__(self, weight: float):
-        super(ConR, self).__init__()
-        self.weight = weight
-        self.con_loss = SupContrastive_Loss(tau = 1.0)
-        
-    def forward(self, factors):
-        norm = 0
-        for factor in factors:
-            q, t, q_label, t_label = factor
-            norm += self.con_loss(q_label, q)
-            norm += self.con_loss(t_label, t)
-        return self.weight * norm / t.shape[0]
 
 class TmpReg(Regularizer):
     def __init__(self, weight: float):
@@ -152,12 +138,12 @@ class TimeReg(Regularizer):
         norm += time_diff.pow(self.p).sum(dim=1).pow(1/self.p).sum()
         return self.weight * norm / time_diff.shape[0]
     
-    
 class AttReg(Regularizer):
     def __init__(self, weight: float):
         super(AttReg, self).__init__()
         self.weight = weight
         self.att = ()
+        self.fc = nn.Linear()
         
     def forward(self, factors):
         norm = 0
@@ -167,3 +153,17 @@ class AttReg(Regularizer):
             rel_t = att(time)
             
         return self.weight * norm / lhs.shape[0]
+    
+class ConR(Regularizer):
+    def __init__(self, weight: float):
+        super(ConR, self).__init__()
+        self.weight = weight
+        self.con_loss = SupContrastive_Loss(tau = 1.0)
+        
+    def forward(self, factors):
+        norm = 0
+        for factor in factors:
+            q, t, q_label, t_label = factor
+            norm += self.con_loss(q_label, q)
+            norm += self.con_loss(t_label, t)
+        return self.weight * norm / t.shape[0]

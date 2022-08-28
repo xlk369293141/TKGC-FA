@@ -137,16 +137,17 @@ if dataset.Tag == False:
 else:
     exec('model = '+args.model+'(dataset.get_shape(), dropouts, args.rank1, args.rank2, args.init, args.ratio)')
 exec('regularizer = '+args.regularizer+'(args.reg)')
-if args.reg_t>0:
-    regularizer = [regularizer, TimeReg(args.reg_t, args.p)]
-else:
-    regularizer = [regularizer, None]
     
 device = 'cuda'
 model.to(device)
-for reg in regularizer:
-    reg.to(device)
-
+if args.reg_t>0:
+    regularizer = [regularizer, TimeReg(args.reg_t, args.p)]
+    for reg in regularizer:
+        reg.to(device)
+else:
+    regularizer = [regularizer, None]
+    regularizer[0].to(device)
+    
 optim_method = {
     'Adagrad': lambda: optim.Adagrad(model.parameters(), lr=args.learning_rate),
     'Adam': lambda: optim.Adam(model.parameters(), lr=args.learning_rate, betas=(args.decay1, args.decay2)),
