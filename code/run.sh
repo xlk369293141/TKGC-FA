@@ -1,11 +1,11 @@
 #!/bin/bash
 #SBATCH -p inspur
-#SBATCH -w inspur-gpu-05
-#SBATCH --output ../complex_dft_debug.out
-#SBATCH --error ../complex_dft_debug.err
+#SBATCH -w inspur-gpu-01
+#SBATCH --output ../tucker_att_debug.out
+#SBATCH --error ../tucker_att_debug.err
 
-CUDA_VISIBLE_DEVICES=0 python -u learn.py --dataset ICEWS14 --model ComplEx_DFT --rank1 200 --rank2 200   --optimizer Adagrad \
---learning_rate 1e-1 --batch_size 128 --regularizer NA --reg 1e-1 --reg_t 0.8 --p 4 --max_epochs 50 \
+CUDA_VISIBLE_DEVICES=0 python -u learn.py --dataset ICEWS14 --model TuckER_DFT --rank1 1000 --rank2 1000 --optimizer Adagrad \
+--learning_rate 1e-1 --batch_size 128 --regularizer L4 --reg 1e-2 --reg_t 0.8 --p 4 --max_epochs 50 \
 --valid 10 -train -id 0 -save -weight --ratio 0.6 --dropout 0.1
 
 # CUDA_VISIBLE_DEVICES=0 python -u learn.py --dataset ICEWS05-15 --model TuckER_DFT --rank1 200 --rank2 200 --optimizer Adagrad \

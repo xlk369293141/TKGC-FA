@@ -44,8 +44,18 @@ class KBCModel(nn.Module, ABC):
                     ).cpu()
                     b_begin += batch_size
                     bar.update(batch_size)
-        return ranks
-
+        return 
+    
+    def print_all_model_parameters(self):
+        print('\nModel Parameters')
+        print('--------------------------')
+        for name, param in self.named_parameters():
+            print(name, param.numel(), 'requires_grad={}'.format(param.requires_grad))
+        param_sizes = [param.numel() for param in self.parameters()]
+        print('Total # parameters = {}'.format(sum(param_sizes)))
+        print('--------------------------')
+        print()
+        
 class ComplEx(KBCModel):
     def __init__(
             self, sizes: Tuple[int, int, int], rank: int,
@@ -343,12 +353,11 @@ class TuckER_ATT(KBCModel):
         self.embeddings[0].weight.data *= init_size
         self.embeddings[1].weight.data *= init_size
         self.embeddings[2].weight.data *= init_size
-    
+        self.att = nn.MultiheadAttention(rank2, 4, bias=False, batch_first=True)
+        
     def get_time_embedd(self, relations, timestamps):
-        B = relations.size(0)
         tmp = torch.cat((relations, timestamps), 1)
-        tmp = tmp.view(B, self.rank2, 2)
-        temporal_relation_emb = tmp[:,:,0] * tmp[:,:,1]
+        temporal_relation_emb = self.att(relations, timestamps,tmp)
         print(temporal_relation_emb.size())
         return temporal_relation_emb
     

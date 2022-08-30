@@ -89,22 +89,7 @@ class DURA(Regularizer):
             norm += torch.sum(h**2 * r**2 + t**2 * r**2)
 
         return self.weight * norm / h.shape[0]
-
-class DURA_W(Regularizer):
-    def __init__(self, weight: float):
-        super(DURA_W, self).__init__()
-        self.weight = weight
-
-    def forward(self, factors):
-        norm = 0
-        for factor in factors:
-            h, r, t = factor
-
-            norm += 0.5 * torch.sum(t**2 + h**2)
-            norm += 1.5 * torch.sum(h**2 * r**2 + t**2 * r**2)
-
-        return self.weight * norm / h.shape[0]
-
+    
 class TmpReg(Regularizer):
     def __init__(self, weight: float):
         super(TmpReg, self).__init__()
@@ -137,22 +122,18 @@ class TimeReg(Regularizer):
 
         norm += time_diff.pow(self.p).sum(dim=1).pow(1/self.p).sum()
         return self.weight * norm / time_diff.shape[0]
-    
-class AttReg(Regularizer):
+
+class L4(Regularizer):
     def __init__(self, weight: float):
-        super(AttReg, self).__init__()
+        super(L4, self).__init__()
         self.weight = weight
-        self.att = ()
-        self.fc = nn.Linear()
-        
+
     def forward(self, factors):
         norm = 0
         for factor in factors:
-            lhs, rel_t, rhs = factor
- 
-            rel_t = att(time)
-            
-        return self.weight * norm / lhs.shape[0]
+            for f in factor:
+                norm += f.pow(4).sum(dim=1).pow(1/4).sum()
+        return self.weight * norm / factors[0][0].shape[0]
     
 class ConR(Regularizer):
     def __init__(self, weight: float):

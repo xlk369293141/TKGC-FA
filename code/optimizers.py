@@ -18,22 +18,13 @@ class KBCOptimizer(object):
         self.optimizer = optimizer
         self.batch_size = batch_size
         self.verbose = verbose
-
-    def print_all_model_parameters(self):
-        print('\nModel Parameters')
-        print('--------------------------')
-        for name, param in self.named_parameters():
-            print(name, param.numel(), 'requires_grad={}'.format(param.requires_grad))
-        param_sizes = [param.numel() for param in self.parameters()]
-        print('Total # parameters = {}'.format(sum(param_sizes)))
-        print('--------------------------')
-        print()
         
     def epoch(self, examples: torch.LongTensor, e=0, weight=None):
+        self.model.print_all_model_parameters()
         self.model.train()
         actual_examples = examples[torch.randperm(examples.shape[0]), :]
         loss = nn.CrossEntropyLoss(reduction='mean', weight=weight)
-
+        
         with tqdm.tqdm(total=examples.shape[0], unit='ex', disable=not self.verbose) as bar:
             bar.set_description(f'train loss')
             b_begin = 0
