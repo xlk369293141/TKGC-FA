@@ -35,7 +35,6 @@ parser.add_argument(
     '--optimizer', choices=optimizers, default='Adagrad',
     help="Optimizer in {}".format(optimizers)
 )
-
 parser.add_argument(
     '--max_epochs', default=50, type=int,
     help="Number of epochs."
@@ -95,6 +94,16 @@ parser.add_argument(
     help="dropout rate for fact network"
 )
 
+parser.add_argument(
+    '--num_heads', default=1, type=int,
+    help="The number of frequencies chosen"
+)
+
+parser.add_argument(
+    '--num_tiles', default=1, type=int,
+    help="The number of tiles on the time sequence"
+)
+
 parser.add_argument('-train', '--do_train', action='store_true')
 parser.add_argument('-test', '--do_test', action='store_true')
 parser.add_argument('-save', '--do_save', action='store_true')
@@ -105,9 +114,15 @@ parser.add_argument('-ckpt', '--checkpoint', type=str, default='')
 
 args = parser.parse_args()
 
+seed = np.randint(1e5)
+torch.manual_seed(seed)
+torch.cuda.manual_seed_all(seed)
+np.random.seed(seed)
+torch.backends.cudnn.deterministic = True
+
 if args.do_save:
     assert args.save_path
-    save_suffix = args.model + '_' + args.regularizer + '_' + args.dataset + '_' + args.model_id
+    save_suffix = args.model + '_' + args.regularizer + '_' + args.dataset + '_' + args.model_id + '_' + seed
 
     if not os.path.exists(args.save_path):
         os.mkdir(args.save_path)
@@ -175,6 +190,7 @@ if args.checkpoint != '':
     model.load_state_dict(torch.load(os.path.join(args.checkpoint, 'checkpoint'), map_location='cuda:0'))
 
 if args.do_train:
+    model.print_all_model_parameters()
     with open(os.path.join(save_path, 'train.log'), 'w') as log_file:
         for e in range(args.max_epochs):
             print("Epoch: {}".format(e+1))

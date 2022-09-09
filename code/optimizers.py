@@ -20,7 +20,7 @@ class KBCOptimizer(object):
         self.verbose = verbose
         
     def epoch(self, examples: torch.LongTensor, e=0, weight=None):
-        self.model.print_all_model_parameters()
+        
         self.model.train()
         actual_examples = examples[torch.randperm(examples.shape[0]), :]
         loss = nn.CrossEntropyLoss(reduction='mean', weight=weight)
