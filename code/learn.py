@@ -114,7 +114,7 @@ parser.add_argument('-ckpt', '--checkpoint', type=str, default='')
 
 args = parser.parse_args()
 
-seed = np.randint(1e5)
+seed = np.random.randint(1e5)
 torch.manual_seed(seed)
 torch.cuda.manual_seed_all(seed)
 np.random.seed(seed)
@@ -122,7 +122,7 @@ torch.backends.cudnn.deterministic = True
 
 if args.do_save:
     assert args.save_path
-    save_suffix = args.model + '_' + args.regularizer + '_' + args.dataset + '_' + args.model_id + '_' + seed
+    save_suffix = args.model + '_' + args.regularizer + '_' + args.dataset + '_' + args.model_id + '_' + str(seed)
 
     if not os.path.exists(args.save_path):
         os.mkdir(args.save_path)
