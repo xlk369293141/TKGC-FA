@@ -10,7 +10,7 @@ class Dataset(object):
     def __init__(self, data_path: str, name: str):
         self.root = os.path.join(data_path, name)
         print(name)
-        TKGC = ['ICEWS14', 'ICEWS05-15', 'GDELT']
+        TKGC = ['ICEWS14', 'ICEWS05-15', 'GDELT', 'YAGO15K']
         if name in TKGC:
             self.Tag = True
         else:
@@ -24,7 +24,10 @@ class Dataset(object):
         self.n_entities = int(max(maxis[0], maxis[2]) + 1)
         self.n_predicates = int(maxis[1] + 1)
         self.n_predicates *= 2
-        self.n_timestamps = int(maxis[3]+1)
+        if maxis.shape[0] > 4:
+            self.n_timestamps = max(int(maxis[3] + 1), int(maxis[4] + 1))
+        else:
+            self.n_timestamps = int(maxis[3] + 1)
         inp_f = open(os.path.join(self.root, 'to_skip.pickle'), 'rb')
         if self.Tag == True:
             self.to_skip: Dict[str, Dict[Tuple[int, int, int], List[int]]] = pickle.load(inp_f)

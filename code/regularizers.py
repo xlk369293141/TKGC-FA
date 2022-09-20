@@ -10,6 +10,14 @@ class Regularizer(nn.Module, ABC):
     def forward(self, factors: Tuple[torch.Tensor]):
         pass
 
+class NA(Regularizer):
+    def __init__(self, weight: float):
+        super(NA, self).__init__()
+        self.weight = weight
+
+    def forward(self, factors):
+        return torch.Tensor([0.0]).cuda()
+    
 class Fro(Regularizer):
     def __init__(self, weight: float):
         super(Fro, self).__init__()
@@ -33,10 +41,10 @@ class L2(Regularizer):
         norm = 0
         for factor in factors:
             for f in factor:
-                norm += self.weight * torch.sum(
+                norm += torch.sum(
                     torch.abs(f) ** 2
                 )
-        return norm / factors[0][0].shape[0]
+        return self.weight * norm / factors[0][0].shape[0]
 
 class L1(Regularizer):
     def __init__(self, weight: float):
@@ -47,18 +55,10 @@ class L1(Regularizer):
         norm = 0
         for factor in factors:
             for f in factor:
-                norm += self.weight * torch.sum(
+                norm += torch.sum(
                     torch.abs(f)**1
                 )
-        return norm / factors[0][0].shape[0]
-
-class NA(Regularizer):
-    def __init__(self, weight: float):
-        super(NA, self).__init__()
-        self.weight = weight
-
-    def forward(self, factors):
-        return torch.Tensor([0.0]).cuda()
+        return self.weight * norm / factors[0][0].shape[0]
 
 class N3(Regularizer):
     def __init__(self, weight: float):
@@ -69,10 +69,24 @@ class N3(Regularizer):
         norm = 0
         for factor in factors:
             for f in factor:
-                norm += self.weight * torch.sum(
+                norm += torch.sum(
                     torch.abs(f) ** 3
-                ) / f.shape[0]
-        return norm
+                )
+        return self.weight * norm / factors[0][0].shape[0]
+
+class L4(Regularizer):
+    def __init__(self, weight: float):
+        super(L4, self).__init__()
+        self.weight = weight
+
+    def forward(self, factors):
+        norm = 0
+        for factor in factors:
+            for f in factor:
+                norm += torch.sum(
+                    torch.norm(f, 4) ** 4
+                )
+        return self.weight * norm / factors[0][0].shape[0]
     
 class DURA(Regularizer):
     def __init__(self, weight: float):
@@ -84,7 +98,6 @@ class DURA(Regularizer):
 
         for factor in factors:
             h, r, t = factor
-
             norm += torch.sum(t**2 + h**2)
             norm += torch.sum(h**2 * r**2 + t**2 * r**2)
 
@@ -117,23 +130,27 @@ class TimeReg(Regularizer):
         self.p = p
         
     def forward(self, tim):
+        assert not torch.any(torch.isnan(tim)), "nan tim"
         norm = 0
         time_diff = torch.diff(tim, dim=0)
-
-        norm += time_diff.pow(self.p).sum(dim=1).pow(1/self.p).sum()
+        for f in time_diff:
+            norm += torch.sum(
+                    torch.norm(f, self.p) ** self.p
+                )
+            
         return self.weight * norm / time_diff.shape[0]
-
-class L4(Regularizer):
-    def __init__(self, weight: float):
-        super(L4, self).__init__()
+    
+class CoreReg(Regularizer):
+    def __init__(self, weight: float, p: int):
+        super(CoreReg, self).__init__()
         self.weight = weight
-
-    def forward(self, factors):
+        self.p = p
+        
+    def forward(self, W):
+        assert not torch.any(torch.isnan(W)), "nan tim"
         norm = 0
-        for factor in factors:
-            for f in factor:
-                norm += f.pow(4).sum(dim=1).pow(1/4).sum()
-        return self.weight * norm / factors[0][0].shape[0]
+        norm += torch.norm(W, self.p) ** self.P
+        return self.weight * norm
     
 class ConR(Regularizer):
     def __init__(self, weight: float):

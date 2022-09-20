@@ -4,7 +4,7 @@ from torch import nn
 from torch import optim
 
 from models import KBCModel
-from regularizers import Regularizer
+from regularizers import *
 
 
 class KBCOptimizer(object):
@@ -20,8 +20,6 @@ class KBCOptimizer(object):
         self.verbose = verbose
         
     def epoch(self, examples: torch.LongTensor, e=0, weight=None):
-        
-        self.model.train()
         actual_examples = examples[torch.randperm(examples.shape[0]), :]
         loss = nn.CrossEntropyLoss(reduction='mean', weight=weight)
         
@@ -32,26 +30,28 @@ class KBCOptimizer(object):
                 input_batch = actual_examples[
                     b_begin:b_begin + self.batch_size
                 ].cuda()
-
+                
                 predictions, factors = self.model.forward(input_batch)
+                assert not torch.any(torch.isnan(factors[0][0])), "nan f"
+                assert not torch.any(torch.isnan(factors[0][1])), "nan f"
+                assert not torch.any(torch.isnan(factors[0][2])), "nan f"
                 truth = input_batch[:, 2]
 
                 l_fit = loss(predictions, truth)
                 l_reg = self.regularizer.forward(factors)
-                if self.regularizer_t is None:
-                    l_t = torch.Tensor([0.0]).cuda()
-                    l = l_fit + l_reg
-                else:
-                    l_t = self.regularizer_t.forward(self.model.embeddings[2].weight)
-                    l = l_fit + l_reg + l_t
-                
+                l_t = torch.zeros_like(l_reg)
+                if self.regularizer_t is not None:
+                    if self.model.no_time_emb:
+                        l_t = self.regularizer_t.forward(self.model.embeddings[2].weight[:-1])
+                    else:
+                        l_t = self.regularizer_t.forward(self.model.embeddings[2].weight)
+                l = l_fit + l_reg + l_t
+                l_w = torch.norm(self.model.W.abs(), 2)
+                l += 0.03 * l_w
+                l_w = torch.Tensor([0.0]).cuda()
                 self.optimizer.zero_grad()
                 l.backward()
-
                 self.optimizer.step()
                 b_begin += self.batch_size
                 bar.update(input_batch.shape[0])
-
-                bar.set_postfix(loss=f'{l.item():.1f}', reg=f'{l_reg.item():.1f}', reg_t=f'{l_t.item():.2f}')
-               
-        return l
+                bar.set_postfix(loss=f'{l.item():.1f}', reg=f'{l_reg.item():.1f}', reg_t=f'{l_t.item():.2f}', reg_w=f'{l_w.item():.2f}')

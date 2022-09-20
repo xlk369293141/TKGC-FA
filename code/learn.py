@@ -11,7 +11,7 @@ from models import *
 from regularizers import *
 from optimizers import KBCOptimizer
 
-datasets = ['WN18RR', 'FB237', 'YAGO3-10', 'ICEWS14', 'ICEWS05-15', 'GDELT']
+datasets = ['WN18RR', 'FB237', 'YAGO3-10', 'ICEWS14', 'ICEWS05-15', 'GDELT', 'YAGO15K']
 
 parser = argparse.ArgumentParser(
     description="Tensor Factorization for Knowledge Graph Completion"
@@ -104,6 +104,11 @@ parser.add_argument(
     help="The number of tiles on the time sequence"
 )
 
+parser.add_argument(
+    '--no_time_emb', default=False, action="store_true",
+    help="Use a specific embedding for non temporal relations"
+)
+
 parser.add_argument('-train', '--do_train', action='store_true')
 parser.add_argument('-test', '--do_test', action='store_true')
 parser.add_argument('-save', '--do_save', action='store_true')
@@ -119,7 +124,7 @@ torch.manual_seed(seed)
 torch.cuda.manual_seed_all(seed)
 np.random.seed(seed)
 torch.backends.cudnn.deterministic = True
-
+print("Random Seed:  " + str(seed))
 if args.do_save:
     assert args.save_path
     save_suffix = args.model + '_' + args.regularizer + '_' + args.dataset + '_' + args.model_id + '_' + str(seed)
@@ -150,9 +155,11 @@ regularizer = None
 if dataset.Tag == False:
     exec('model = '+args.model+'(dataset.get_shape(), dropouts, args.rank1, args.init)')
 else:
-    exec('model = '+args.model+'(dataset.get_shape(), dropouts, args.rank1, args.rank2, args.init, args.ratio)')
+    exec('model = '+args.model+'(dataset.get_shape(), dropouts, args.rank1, args.rank2, args.init, args.ratio, no_time_emb=args.no_time_emb)')
 exec('regularizer = '+args.regularizer+'(args.reg)')
-    
+print("Emb Reg: " + str(args.reg))
+print("Time Reg: " + str(args.reg_t))
+
 device = 'cuda'
 model.to(device)
 if args.reg_t>0:
@@ -171,7 +178,6 @@ optim_method = {
 
 optimizer = KBCOptimizer(model, regularizer, optim_method, args.batch_size)
 
-
 def avg_both(mrrs: Dict[str, float], hits: Dict[str, torch.FloatTensor]):
     """
     aggregate metrics for missing lhs and rhs
@@ -183,7 +189,6 @@ def avg_both(mrrs: Dict[str, float], hits: Dict[str, torch.FloatTensor]):
     h = (hits['lhs'] + hits['rhs']) / 2.
     return {'MRR': m, 'hits@[1,3,10]': h}
 
-
 cur_loss = 0
 
 if args.checkpoint != '':
@@ -191,6 +196,7 @@ if args.checkpoint != '':
 
 if args.do_train:
     model.print_all_model_parameters()
+    model.train()
     with open(os.path.join(save_path, 'train.log'), 'w') as log_file:
         for e in range(args.max_epochs):
             print("Epoch: {}".format(e+1))
@@ -199,11 +205,19 @@ if args.do_train:
 
             if (e + 1) % args.valid == 0:
                 valid = avg_both(*dataset.eval(model, 'valid', -1))
+                train = avg_both(*dataset.eval(model, 'train', 50000))
+                print("\t TRAIN: ", train)
                 print("\t VALID: ", valid)
                 log_file.write("Epoch: {}\n".format(e+1))
                 log_file.write("\t VALID: {}\n".format(valid))
                 log_file.flush()
-
+                a, b , c = model.W.size()
+                ratio_2 = (model.W.abs()>0.2).sum()/a/b/c
+                ratio_5 = (model.W.abs()>0.5).sum()/a/b/c
+                ratio_10 = (model.W.abs()>1.0).sum()/a/b/c
+                print(ratio_2, ratio_5, ratio_10)
+                print((model.W**2).sum()/a/b/c)           
+                           
         test = avg_both(*dataset.eval(model, 'test', 50000))
         log_file.write("\t TEST: {}\n".format(test))
         print("\t TEST : ", test)
@@ -219,6 +233,11 @@ if args.do_save:
         np.save(os.path.join(save_path, 'entity_embedding.npy'), embeddings[0].weight.detach().cpu().numpy())
         np.save(os.path.join(save_path, 'relation_embedding.npy'), embeddings[1].weight.detach().cpu().numpy())
         np.save(os.path.join(save_path, 'time_embedding.npy'), embeddings[2].weight.detach().cpu().numpy())
+    elif len_emb == 4:
+        np.save(os.path.join(save_path, 'entity_embedding.npy'), embeddings[0].weight.detach().cpu().numpy())
+        np.save(os.path.join(save_path, 'relation_embedding.npy'), embeddings[1].weight.detach().cpu().numpy())
+        np.save(os.path.join(save_path, 'time_embedding.npy'), embeddings[2].weight.detach().cpu().numpy())
+        np.save(os.path.join(save_path, 'no_time_embedding.npy'), embeddings[3].weight.detach().cpu().numpy())
     else:
         print('SAVE ERROR!, No Static Embedding.')
 
