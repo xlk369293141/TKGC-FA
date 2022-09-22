@@ -32,23 +32,25 @@ class KBCOptimizer(object):
                 ].cuda()
                 
                 predictions, factors = self.model.forward(input_batch)
-                assert not torch.any(torch.isnan(factors[0][0])), "nan f"
-                assert not torch.any(torch.isnan(factors[0][1])), "nan f"
-                assert not torch.any(torch.isnan(factors[0][2])), "nan f"
+                assert not torch.any(torch.isnan(factors[0][0])), "nan"
+                assert not torch.any(torch.isnan(factors[0][1])), "nan"
+                assert not torch.any(torch.isnan(factors[0][2])), "nan"
+                assert not torch.any(torch.isnan(factors[0][3])), "nan"
                 truth = input_batch[:, 2]
 
                 l_fit = loss(predictions, truth)
-                l_reg = self.regularizer.forward(factors)
+                l_reg, l_w = self.regularizer.forward(factors, self.model.W)
+                l_w = 0.01 * l_w
                 l_t = torch.zeros_like(l_reg)
                 if self.regularizer_t is not None:
                     if self.model.no_time_emb:
                         l_t = self.regularizer_t.forward(self.model.embeddings[2].weight[:-1])
                     else:
                         l_t = self.regularizer_t.forward(self.model.embeddings[2].weight)
-                l = l_fit + l_reg + l_t
-                l_w = torch.norm(self.model.W.abs(), 2)
-                l += 0.03 * l_w
-                l_w = torch.Tensor([0.0]).cuda()
+                # l_w = torch.Tensor([0.0]).cuda()
+                l = l_fit + l_reg + l_t + l_w
+
+                
                 self.optimizer.zero_grad()
                 l.backward()
                 self.optimizer.step()

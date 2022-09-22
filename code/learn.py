@@ -152,6 +152,7 @@ dropouts = tuple(args.dropout for i in range(3))
 
 model = None
 regularizer = None
+print(args.model)
 if dataset.Tag == False:
     exec('model = '+args.model+'(dataset.get_shape(), dropouts, args.rank1, args.init)')
 else:
@@ -205,18 +206,20 @@ if args.do_train:
 
             if (e + 1) % args.valid == 0:
                 valid = avg_both(*dataset.eval(model, 'valid', -1))
+                test = avg_both(*dataset.eval(model, 'test', -1))
                 train = avg_both(*dataset.eval(model, 'train', 50000))
                 print("\t TRAIN: ", train)
                 print("\t VALID: ", valid)
+                print("\t TEST: ", test)
                 log_file.write("Epoch: {}\n".format(e+1))
                 log_file.write("\t VALID: {}\n".format(valid))
                 log_file.flush()
-                a, b , c = model.W.size()
-                ratio_2 = (model.W.abs()>0.2).sum()/a/b/c
-                ratio_5 = (model.W.abs()>0.5).sum()/a/b/c
-                ratio_10 = (model.W.abs()>1.0).sum()/a/b/c
-                print(ratio_2, ratio_5, ratio_10)
-                print((model.W**2).sum()/a/b/c)           
+                # a, b , c = model.W.size()
+                # ratio_2 = (model.W.abs()>0.2).sum()/a/b/c
+                # ratio_5 = (model.W.abs()>0.5).sum()/a/b/c
+                # ratio_10 = (model.W.abs()>1.0).sum()/a/b/c
+                # print(ratio_2, ratio_5, ratio_10)
+                # print(torch.norm(model.W, 2)/a/b/c, model.W.max())
                            
         test = avg_both(*dataset.eval(model, 'test', 50000))
         log_file.write("\t TEST: {}\n".format(test))
