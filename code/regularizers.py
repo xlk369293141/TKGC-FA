@@ -80,43 +80,38 @@ class N3(Regularizer):
         super(N3, self).__init__()
         self.weight = weight
 
-    def forward(self, factors, W):
+    def forward(self, factors):
         norm = 0
         for factor in factors:
             for f in factor:
+                assert not torch.any(torch.isnan(f)), "nan factor"
                 norm += torch.sum(
                     torch.abs(f) ** 3
                 )
-                
-        e = torch.ones_like(W)
-        for i in range(W.size(0)):
-            e[i,i,i] = 0.0
-        w_norm = (W * e).pow(2).sum().sqrt()
-        return self.weight * norm / factors[0][0].shape[0], self.weight * w_norm
-    
+        return self.weight * norm / factors[0][0].shape[0]
+        
 class TmpReg(Regularizer):
     def __init__(self, weight: float):
         super(TmpReg, self).__init__()
         self.weight = weight
 
-    def forward(self, factors, W):
+    def forward(self, factors):
         norm = 0
         for factor in factors:
-            lhs, rel_1, rel_2, rhs = factor
-            temporal_rel = rel_1 * rel_2
-            temporal_rel = torch.mm(temporal_rel, self.W.view(temporal_rel.size(1), -1))
-            temporal_rel = temporal_rel.view(-1, lhs.size(1), lhs.size(1))
-            W_mat = self.hidden_dropout1(temporal_rel)
+            lhs, rel_t, rhs = factor
+            assert not torch.any(torch.isnan(lhs)), "nan lhs"
+            assert not torch.any(torch.isnan(rel_t)), "nan rel_t"
+            assert not torch.any(torch.isnan(rhs)), "nan rhs"
             lhs = lhs.view(-1, 1, lhs.size(1))
             q1 = torch.bmm(lhs, rel_t)
             rhs = rhs.view(-1, 1, rhs.size(1))
             q2 = torch.bmm(rhs, rel_t)
             assert(q1.size() == q2.size())
             
-            norm +=  0.5 * torch.sum(q1**2 + rhs**2)
-            norm +=  0.5 * torch.sum(lhs**2 + q2**2)
+            norm +=  torch.sum(q1**2 + rhs**2)
+            norm +=  torch.sum(lhs**2 + q2**2)
 
-        return self.weight * norm / factors[0][0].shape[0], 0.0
+        return self.weight * norm / factors[0][0].shape[0]
 
 class TimeReg(Regularizer):
     def __init__(self, weight: float, p: int):
@@ -125,23 +120,24 @@ class TimeReg(Regularizer):
         self.p = p
         
     def forward(self, tim):
-        assert not torch.any(torch.isnan(tim)), "nan tim"
+        assert not torch.any(torch.isnan(tim)), "nan time embedding"
         norm = 0
         time_diff = torch.diff(tim, dim=0)
         norm += time_diff.pow(self.p).sum(dim=1).pow(1/self.p).sum()
         return self.weight * norm / time_diff.shape[0]
     
 class CoreReg(Regularizer):
-    def __init__(self, weight: float, p: int):
+    def __init__(self, weight: float):
         super(CoreReg, self).__init__()
         self.weight = weight
-        self.p = p
         
     def forward(self, W):
-        assert not torch.any(torch.isnan(W)), "nan tim"
-        norm = 0
-        norm += torch.norm(W, self.p) ** self.P
-        return self.weight * norm
+        assert not torch.any(torch.isnan(W)), "nan core tensor"
+        e = torch.ones_like(W)
+        for i in range(W.size(0)):
+            e[i,i,i] = 0.0
+        w_norm = (W * e).pow(2).sum().sqrt()
+        return self.weight * w_norm
     
 class ConR(Regularizer):
     def __init__(self, weight: float):

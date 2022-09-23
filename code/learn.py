@@ -64,6 +64,10 @@ parser.add_argument(
     help="Time Regularization weight"
 )
 parser.add_argument(
+    '--reg_w', default=0, type=float,
+    help="Time Regularization weight"
+)
+parser.add_argument(
     '--p', default=2, type=int,
     help="p-norm of Time Regularization"
 )
@@ -153,23 +157,23 @@ dropouts = tuple(args.dropout for i in range(3))
 model = None
 regularizer = None
 print(args.model)
+print("Emb Reg: " + args.regularizer + '  ' +str(args.reg))
+print("Time Reg: " + str(args.reg_t))
+print("Core Reg: " + str(args.reg_w))
 if dataset.Tag == False:
     exec('model = '+args.model+'(dataset.get_shape(), dropouts, args.rank1, args.init)')
 else:
-    exec('model = '+args.model+'(dataset.get_shape(), dropouts, args.rank1, args.rank2, args.init, args.ratio, no_time_emb=args.no_time_emb)')
+    exec('model = '+args.model+'(dataset.get_shape(), dropouts, args.rank1, args.rank2, args.init, args.ratio, args.no_time_emb, args.regularizer)')
 exec('regularizer = '+args.regularizer+'(args.reg)')
-print("Emb Reg: " + str(args.reg))
-print("Time Reg: " + str(args.reg_t))
 
 device = 'cuda'
 model.to(device)
-if args.reg_t>0:
-    regularizer = [regularizer, TimeReg(args.reg_t, args.p)]
-    for reg in regularizer:
-        reg.to(device)
-else:
-    regularizer = [regularizer, None]
-    regularizer[0].to(device)
+assert args.reg_t >=0, "Invalid time reg weight."
+assert args.reg_w >=0, "Invalid core reg weight."
+
+regularizer = [regularizer, TimeReg(args.reg_t, args.p), CoreReg(args.reg_w)]
+for reg in regularizer:
+    reg.to(device)
     
 optim_method = {
     'Adagrad': lambda: optim.Adagrad(model.parameters(), lr=args.learning_rate),
@@ -206,11 +210,11 @@ if args.do_train:
 
             if (e + 1) % args.valid == 0:
                 valid = avg_both(*dataset.eval(model, 'valid', -1))
-                test = avg_both(*dataset.eval(model, 'test', -1))
-                train = avg_both(*dataset.eval(model, 'train', 50000))
-                print("\t TRAIN: ", train)
+                # test = avg_both(*dataset.eval(model, 'test', -1))
+                # train = avg_both(*dataset.eval(model, 'train', 50000))
+                # print("\t TRAIN: ", train)
+                # print("\t TEST: ", test)
                 print("\t VALID: ", valid)
-                print("\t TEST: ", test)
                 log_file.write("Epoch: {}\n".format(e+1))
                 log_file.write("\t VALID: {}\n".format(valid))
                 log_file.flush()

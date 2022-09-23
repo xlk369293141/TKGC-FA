@@ -15,6 +15,7 @@ class KBCOptimizer(object):
         self.model = model
         self.regularizer = regularizer[0]
         self.regularizer_t = regularizer[1]
+        self.regularizer_w = regularizer[2]
         self.optimizer = optimizer
         self.batch_size = batch_size
         self.verbose = verbose
@@ -39,18 +40,19 @@ class KBCOptimizer(object):
                 truth = input_batch[:, 2]
 
                 l_fit = loss(predictions, truth)
-                l_reg, l_w = self.regularizer.forward(factors, self.model.W)
-                l_w = 0.01 * l_w
+                l_reg = self.regularizer.forward(factors)
+                l_w = torch.zeros_like(l_reg)
+                if self.regularizer_w is not None:
+                    l_w = self.regularizer_w.forward(self.model.W)
                 l_t = torch.zeros_like(l_reg)
                 if self.regularizer_t is not None:
                     if self.model.no_time_emb:
                         l_t = self.regularizer_t.forward(self.model.embeddings[2].weight[:-1])
                     else:
                         l_t = self.regularizer_t.forward(self.model.embeddings[2].weight)
-                # l_w = torch.Tensor([0.0]).cuda()
+
                 l = l_fit + l_reg + l_t + l_w
 
-                
                 self.optimizer.zero_grad()
                 l.backward()
                 self.optimizer.step()
