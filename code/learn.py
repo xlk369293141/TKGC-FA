@@ -210,11 +210,11 @@ if args.do_train:
 
             if (e + 1) % args.valid == 0:
                 valid = avg_both(*dataset.eval(model, 'valid', -1))
-                # test = avg_both(*dataset.eval(model, 'test', -1))
+                test = avg_both(*dataset.eval(model, 'test', -1))
                 # train = avg_both(*dataset.eval(model, 'train', 50000))
                 # print("\t TRAIN: ", train)
-                # print("\t TEST: ", test)
                 print("\t VALID: ", valid)
+                print("\t TEST: ", test)
                 log_file.write("Epoch: {}\n".format(e+1))
                 log_file.write("\t VALID: {}\n".format(valid))
                 log_file.flush()

@@ -121,9 +121,8 @@ class TimeReg(Regularizer):
         
     def forward(self, tim):
         assert not torch.any(torch.isnan(tim)), "nan time embedding"
-        norm = 0
         time_diff = torch.diff(tim, dim=0)
-        norm += time_diff.pow(self.p).sum(dim=1).pow(1/self.p).sum()
+        norm = torch.sum(time_diff.abs() ** self.p)
         return self.weight * norm / time_diff.shape[0]
     
 class CoreReg(Regularizer):
@@ -136,7 +135,7 @@ class CoreReg(Regularizer):
         e = torch.ones_like(W)
         for i in range(W.size(0)):
             e[i,i,i] = 0.0
-        w_norm = (W * e).pow(2).sum().sqrt()
+        w_norm = torch.sum((W * e).abs() ** 2)
         return self.weight * w_norm
     
 class ConR(Regularizer):

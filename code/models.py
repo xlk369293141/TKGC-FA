@@ -190,10 +190,9 @@ class TuckER_ATT(KBCModel):
         self.embeddings[0].weight.data *= init_size
         self.embeddings[1].weight.data *= init_size
         self.embeddings[2].weight.data *= init_size
-
         mapper = [0]  # mapper can be a list with [0-12]
         mapper = [temp * (sizes[2] // 12) for temp in mapper] 
-        print(mapper)
+        print("Mapper Freq: " + str(mapper))
         self.num_heads = len(mapper)
         self.dct_layer = TimeDCTBase(mapper, sizes[2], self.t_emb_dim)
         reduction = 4
@@ -243,7 +242,7 @@ class TuckER_ATT(KBCModel):
         if self.reg == 'TmpReg':
             regular = [(lhs, temporal_rel, rhs)]
         else:
-            regular = [(lhs, tmp_r1, tmp_r2, rhs)]
+            regular = [(math.pow(2, 1 / 3)  *lhs, tmp_r1, tmp_r2, math.pow(2, 1 / 3) * rhs)]
         return (
                     torch.mm(x, to_score.transpose(1,0))
                 ), regular
