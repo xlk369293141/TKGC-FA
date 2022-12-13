@@ -121,3 +121,27 @@ class Dataset(object):
         #     delta = relativedelta.relativedelta(youngest, oldest)#日期差
         #     print("Time Span: \t", delta.years, 'Years,', delta.months, 'months,', delta.days, 'days')
         return self.n_entities, self.n_predicates, self.n_timestamps
+    
+    def calculate(self):
+        #distance dic    fact:time dic
+        time_diff = {}
+        fact_time = {}
+
+        facts = []
+        for i in ['train','valid','test']:
+            for item in self.data[i]:
+                facts = [item[0], item[1], item[2]]
+                if facts in fact_time:
+                    diff = item[3] - fact_time[facts]
+                    if diff in time_diff:
+                        time_diff[diff] += 1
+                        # fact_time[facts] = item[3]
+                    else:
+                        time_diff[diff] = 1
+                        # fact_time[facts] = item[3]
+                    fact_time[facts] = item[3]
+        return time_diff
+            
+        
+        
+        

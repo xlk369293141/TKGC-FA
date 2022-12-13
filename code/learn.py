@@ -65,7 +65,7 @@ parser.add_argument(
 )
 parser.add_argument(
     '--reg_w', default=0, type=float,
-    help="Time Regularization weight"
+    help="Core Regularization weight"
 )
 parser.add_argument(
     '--p', default=2, type=int,
@@ -113,6 +113,15 @@ parser.add_argument(
     help="Use a specific embedding for non temporal relations"
 )
 
+parser.add_argument(
+    '--seed', default=-1, type=int, 
+    help="Use a specific embedding for non temporal relations"
+)
+
+parser.add_argument('--mapper', nargs='+', type=int, default=[0],
+      help="Mapper for Frequency Attention Module"
+)
+
 parser.add_argument('-train', '--do_train', action='store_true')
 parser.add_argument('-test', '--do_test', action='store_true')
 parser.add_argument('-save', '--do_save', action='store_true')
@@ -123,7 +132,10 @@ parser.add_argument('-ckpt', '--checkpoint', type=str, default='')
 
 args = parser.parse_args()
 
-seed = np.random.randint(1e5)
+if args.seed == -1 :
+    seed = np.random.randint(1e5)
+else:
+    seed = args.seed
 torch.manual_seed(seed)
 torch.cuda.manual_seed_all(seed)
 np.random.seed(seed)
@@ -163,7 +175,7 @@ print("Core Reg: " + str(args.reg_w))
 if dataset.Tag == False:
     exec('model = '+args.model+'(dataset.get_shape(), dropouts, args.rank1, args.init)')
 else:
-    exec('model = '+args.model+'(dataset.get_shape(), dropouts, args.rank1, args.rank2, args.init, args.ratio, args.no_time_emb, args.regularizer)')
+    exec('model = '+args.model+'(dataset.get_shape(), dropouts, args.rank1, args.rank2, args.init, args.ratio, args.no_time_emb, args.regularizer, args.mapper)')
 exec('regularizer = '+args.regularizer+'(args.reg)')
 
 device = 'cuda'
@@ -210,11 +222,11 @@ if args.do_train:
 
             if (e + 1) % args.valid == 0:
                 valid = avg_both(*dataset.eval(model, 'valid', -1))
-                test = avg_both(*dataset.eval(model, 'test', -1))
+                # test = avg_both(*dataset.eval(model, 'test', -1))
                 # train = avg_both(*dataset.eval(model, 'train', 50000))
                 # print("\t TRAIN: ", train)
                 print("\t VALID: ", valid)
-                print("\t TEST: ", test)
+                # print("\t TEST: ", test)
                 log_file.write("Epoch: {}\n".format(e+1))
                 log_file.write("\t VALID: {}\n".format(valid))
                 log_file.flush()

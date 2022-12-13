@@ -103,7 +103,7 @@ class TuckER(KBCModel):
 class TuckER_DFT(KBCModel):
     def __init__(
             self, sizes: Tuple[int, int, int], dropouts: Tuple[float, float, float], rank1: int, rank2: int,
-            init_size: float = 1e-2, ratio: float = 0.0, no_time_emb=False
+            init_size: float = 1e-2, ratio: float = 0.0, no_time_emb=False, reg='N3', mapper: list = [0]
     ):
         super(TuckER_DFT, self).__init__()
         self.sizes = sizes
@@ -111,7 +111,7 @@ class TuckER_DFT(KBCModel):
         self.rank2 = rank2
         self.init_size = init_size
         self.no_time_emb = no_time_emb
-
+        self.reg=reg
         self.t_emb_dim = int(ratio * rank2)
         self.W = torch.nn.Parameter(torch.tensor(np.random.uniform(-init_size, init_size, (rank1, rank2, rank1)), 
                                     dtype=torch.float, device="cuda", requires_grad=True))
@@ -152,16 +152,18 @@ class TuckER_DFT(KBCModel):
         x = self.bn1(x)
         x = self.hidden_dropout2(x)
         to_score = self.embeddings[0].weight
+        if self.reg == 'TmpReg':
+            regular = [(math.pow(2, 1 / 3)*lhs, temporal_rel, math.pow(2, 1 / 3)*rhs)]
+        else:
+            regular = [(math.pow(2, 1 / 3)*lhs, tmp_r1, tmp_r2, math.pow(2, 1 / 3)*rhs)]
         return (
                     torch.mm(x, to_score.transpose(1,0))
-                ), [
-                   (torch.sqrt(lhs ** 2), torch.sqrt(tmp_r1 ** 2 + tmp_r2 ** 2 + 1e-8), torch.sqrt(rhs ** 2))
-               ]
+                ), regular
                 
 class TuckER_ATT(KBCModel):
     def __init__(
             self, sizes: Tuple[int, int, int], dropouts: Tuple[float, float, float], rank1: int, rank2: int,
-            init_size: float = 1e-3, ratio: float = 0.5, no_time_emb=False, reg='N3'
+            init_size: float = 1e-3, ratio: float = 0.5, no_time_emb=False, reg='N3', mapper_list: list = [0]
     ):
         super(TuckER_ATT, self).__init__()
         self.sizes = sizes
@@ -175,7 +177,6 @@ class TuckER_ATT(KBCModel):
         
         self.W = torch.nn.Parameter(torch.tensor(np.random.uniform(-1, 1, (rank1, rank2, rank1)), 
                                     dtype=torch.float, device="cuda", requires_grad=True))
-        
         # self.W.data *= init_size
         self.bn0 = torch.nn.BatchNorm1d(rank1)
         self.bn1 = torch.nn.BatchNorm1d(rank1)
@@ -190,11 +191,15 @@ class TuckER_ATT(KBCModel):
         self.embeddings[0].weight.data *= init_size
         self.embeddings[1].weight.data *= init_size
         self.embeddings[2].weight.data *= init_size
-        mapper = [0]  # mapper can be a list with [0-12]
-        mapper = [temp * (sizes[2] // 12) for temp in mapper] 
-        print("Mapper Freq: " + str(mapper))
+        # mapper = [0]  # mapper can be a list with [0-12]
+        print("Mapper Freq: " + str(mapper_list))
+        mapper = [temp * (sizes[2] // 12) for temp in mapper_list] 
         self.num_heads = len(mapper)
-        self.dct_layer = TimeDCTBase(mapper, sizes[2], self.t_emb_dim)
+        if self.no_time_emb:
+            self.dct_layer = TimeDCTBase(mapper, sizes[2]-1, self.t_emb_dim)    
+        else:
+            self.dct_layer = TimeDCTBase(mapper, sizes[2], self.t_emb_dim)
+        
         reduction = 4
         self.fc = nn.Sequential(
             nn.Linear(self.t_emb_dim, self.t_emb_dim // reduction, bias=False),
@@ -204,10 +209,10 @@ class TuckER_ATT(KBCModel):
         )
         
     def get_time_embedd(self, relations, timestamps):
-        # self.register_buffer('weight', self.get_freq_att(height, width, mapper_x, mapper_y, channel))
-        # self.register_parameter('weight', self.get_freq_att(height, width, mapper_x, mapper_y, channel))
-        # att = self.get_freq_att(self.embeddings[2].weight) # [1, self.rank2]
-        T_emb = self.embeddings[2].weight
+        if self.no_time_emb:
+            T_emb = self.embeddings[2].weight[:-1]
+        else:
+            T_emb = self.embeddings[2].weight
         A, D = T_emb.size()
         dct_base = self.dct_layer(T_emb)
         dct_base = relations[:,self.rank2-self.t_emb_dim: self.rank2] * dct_base.view(1, D)
@@ -240,13 +245,25 @@ class TuckER_ATT(KBCModel):
         x = self.hidden_dropout2(x)
         to_score = self.embeddings[0].weight
         if self.reg == 'TmpReg':
-            regular = [(lhs, temporal_rel, rhs)]
+            regular = [(math.pow(2, 1 / 3)*lhs, temporal_rel, math.pow(2, 1 / 3)*rhs)]
         else:
-            regular = [(math.pow(2, 1 / 3)  *lhs, tmp_r1, tmp_r2, math.pow(2, 1 / 3) * rhs)]
+            regular = [(math.pow(2, 1 / 3)*lhs, tmp_r1, tmp_r2, math.pow(2, 1 / 3)*rhs)]
         return (
                     torch.mm(x, to_score.transpose(1,0))
                 ), regular
-                
+        
+    def get_att_weight(self, rel_id):
+        relations = self.embeddings[1](rel_id)
+        if self.no_time_emb:
+            T_emb = self.embeddings[2].weight[:-1]
+        else:
+            T_emb = self.embeddings[2].weight
+        A, D = T_emb.size()
+        dct_base = self.dct_layer(T_emb)
+        dct_base = relations[:,self.rank2-self.t_emb_dim: self.rank2] * dct_base.view(1, D)
+        dct_att = self.fc(dct_base)
+        return dct_att
+    
 # class TNTComplEx(KBCModel):
 #     def __init__(
 #             self, sizes: Tuple[int, int, int, int], dropouts: Tuple[float, float, float], rank1: int, rank2: int, 

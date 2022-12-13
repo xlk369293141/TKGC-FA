@@ -135,7 +135,7 @@ class CoreReg(Regularizer):
         e = torch.ones_like(W)
         for i in range(W.size(0)):
             e[i,i,i] = 0.0
-        w_norm = torch.sum((W * e).abs() ** 2)
+        w_norm = torch.sum((W * e).abs() ** 4)
         return self.weight * w_norm
     
 class ConR(Regularizer):
