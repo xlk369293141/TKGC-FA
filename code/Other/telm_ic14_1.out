@@ -1,0 +1,522 @@
+Assume all timestamps are regularly spaced
+Not using time intervals and events eval
+Start training process:  TeLM on ICEWS14 using rank = 2110 lr = 0.1 emb_reg = 0.0075 time_reg = 0.01 time_granularity = 1
+
+Model Parameters
+--------------------------
+W.weight 8440 requires_grad=True
+embeddings.0.weight 60160320 requires_grad=True
+embeddings.1.weight 3882400 requires_grad=True
+embeddings.2.weight 3080600 requires_grad=True
+Total # parameters = 67131760
+--------------------------
+
+[ Epoch: 0 ]
+[ Epoch: 1 ]
+[ Epoch: 2 ]
+[ Epoch: 3 ]
+[ Epoch: 4 ]
+valid:  0.6218328177928925
+test:  0.6106984913349152
+	 VALID :  {'MRR': 0.6218328177928925, 'hits@[1,3,10]': tensor([0.5388, 0.6743, 0.7709])}
+	 TEST : {'MRR': 0.6106984913349152, 'hits@[1,3,10]': tensor([0.5255, 0.6635, 0.7656])}
+[ Epoch: 5 ]
+[ Epoch: 6 ]
+[ Epoch: 7 ]
+[ Epoch: 8 ]
+[ Epoch: 9 ]
+valid:  0.6278628706932068
+test:  0.6180532276630402
+	 VALID :  {'MRR': 0.6278628706932068, 'hits@[1,3,10]': tensor([0.5475, 0.6785, 0.7737])}
+	 TEST : {'MRR': 0.6180532276630402, 'hits@[1,3,10]': tensor([0.5353, 0.6679, 0.7679])}
+[ Epoch: 10 ]
+[ Epoch: 11 ]
+[ Epoch: 12 ]
+[ Epoch: 13 ]
+[ Epoch: 14 ]
+valid:  0.6310901343822479
+test:  0.6205755770206451
+	 VALID :  {'MRR': 0.6310901343822479, 'hits@[1,3,10]': tensor([0.5520, 0.6808, 0.7737])}
+	 TEST : {'MRR': 0.6205755770206451, 'hits@[1,3,10]': tensor([0.5394, 0.6698, 0.7695])}
+[ Epoch: 15 ]
+[ Epoch: 16 ]
+[ Epoch: 17 ]
+[ Epoch: 18 ]
+[ Epoch: 19 ]
+valid:  0.6311885714530945
+test:  0.6211750507354736
+	 VALID :  {'MRR': 0.6311885714530945, 'hits@[1,3,10]': tensor([0.5513, 0.6810, 0.7740])}
+	 TEST : {'MRR': 0.6211750507354736, 'hits@[1,3,10]': tensor([0.5394, 0.6710, 0.7715])}
+[ Epoch: 20 ]
+[ Epoch: 21 ]
+[ Epoch: 22 ]
+[ Epoch: 23 ]
+[ Epoch: 24 ]
+valid:  0.6315501928329468
+test:  0.6218848526477814
+	 VALID :  {'MRR': 0.6315501928329468, 'hits@[1,3,10]': tensor([0.5523, 0.6793, 0.7744])}
+	 TEST : {'MRR': 0.6218848526477814, 'hits@[1,3,10]': tensor([0.5410, 0.6695, 0.7715])}
+[ Epoch: 25 ]
+[ Epoch: 26 ]
+[ Epoch: 27 ]
+[ Epoch: 28 ]
+[ Epoch: 29 ]
+valid:  0.6315281391143799
+test:  0.6230278611183167
+	 VALID :  {'MRR': 0.6315281391143799, 'hits@[1,3,10]': tensor([0.5524, 0.6790, 0.7744])}
+	 TEST : {'MRR': 0.6230278611183167, 'hits@[1,3,10]': tensor([0.5433, 0.6696, 0.7706])}
+[ Epoch: 30 ]
+[ Epoch: 31 ]
+[ Epoch: 32 ]
+[ Epoch: 33 ]
+[ Epoch: 34 ]
+valid:  0.6312614679336548
+test:  0.6226023435592651
+	 VALID :  {'MRR': 0.6312614679336548, 'hits@[1,3,10]': tensor([0.5520, 0.6794, 0.7755])}
+	 TEST : {'MRR': 0.6226023435592651, 'hits@[1,3,10]': tensor([0.5423, 0.6691, 0.7708])}
+[ Epoch: 35 ]
+[ Epoch: 36 ]
+[ Epoch: 37 ]
+[ Epoch: 38 ]
+[ Epoch: 39 ]
+valid:  0.6321872472763062
+test:  0.622842937707901
+	 VALID :  {'MRR': 0.6321872472763062, 'hits@[1,3,10]': tensor([0.5534, 0.6788, 0.7742])}
+	 TEST : {'MRR': 0.622842937707901, 'hits@[1,3,10]': tensor([0.5431, 0.6698, 0.7718])}
+[ Epoch: 40 ]
+[ Epoch: 41 ]
+[ Epoch: 42 ]
+[ Epoch: 43 ]
+[ Epoch: 44 ]
+valid:  0.6320163011550903
+test:  0.6236547827720642
+	 VALID :  {'MRR': 0.6320163011550903, 'hits@[1,3,10]': tensor([0.5533, 0.6787, 0.7741])}
+	 TEST : {'MRR': 0.6236547827720642, 'hits@[1,3,10]': tensor([0.5443, 0.6693, 0.7718])}
+[ Epoch: 45 ]
+[ Epoch: 46 ]
+[ Epoch: 47 ]
+[ Epoch: 48 ]
+[ Epoch: 49 ]
+valid:  0.6323007643222809
+test:  0.6234745681285858
+	 VALID :  {'MRR': 0.6323007643222809, 'hits@[1,3,10]': tensor([0.5538, 0.6790, 0.7736])}
+	 TEST : {'MRR': 0.6234745681285858, 'hits@[1,3,10]': tensor([0.5440, 0.6687, 0.7714])}
+[ Epoch: 50 ]
+[ Epoch: 51 ]
+[ Epoch: 52 ]
+[ Epoch: 53 ]
+[ Epoch: 54 ]
+valid:  0.6268690526485443
+test:  0.6166582703590393
+	 VALID :  {'MRR': 0.6268690526485443, 'hits@[1,3,10]': tensor([0.5473, 0.6744, 0.7714])}
+	 TEST : {'MRR': 0.6166582703590393, 'hits@[1,3,10]': tensor([0.5341, 0.6662, 0.7681])}
+[ Epoch: 55 ]
+[ Epoch: 56 ]
+[ Epoch: 57 ]
+[ Epoch: 58 ]
+[ Epoch: 59 ]
+valid:  0.628812164068222
+test:  0.6215981245040894
+	 VALID :  {'MRR': 0.628812164068222, 'hits@[1,3,10]': tensor([0.5483, 0.6775, 0.7748])}
+	 TEST : {'MRR': 0.6215981245040894, 'hits@[1,3,10]': tensor([0.5406, 0.6703, 0.7717])}
+[ Epoch: 60 ]
+[ Epoch: 61 ]
+[ Epoch: 62 ]
+[ Epoch: 63 ]
+[ Epoch: 64 ]
+valid:  0.6317117512226105
+test:  0.6233447790145874
+	 VALID :  {'MRR': 0.6317117512226105, 'hits@[1,3,10]': tensor([0.5521, 0.6800, 0.7766])}
+	 TEST : {'MRR': 0.6233447790145874, 'hits@[1,3,10]': tensor([0.5428, 0.6703, 0.7727])}
+[ Epoch: 65 ]
+[ Epoch: 66 ]
+[ Epoch: 67 ]
+[ Epoch: 68 ]
+[ Epoch: 69 ]
+valid:  0.632502555847168
+test:  0.6239787638187408
+	 VALID :  {'MRR': 0.632502555847168, 'hits@[1,3,10]': tensor([0.5526, 0.6802, 0.7793])}
+	 TEST : {'MRR': 0.6239787638187408, 'hits@[1,3,10]': tensor([0.5434, 0.6708, 0.7744])}
+[ Epoch: 70 ]
+[ Epoch: 71 ]
+[ Epoch: 72 ]
+[ Epoch: 73 ]
+[ Epoch: 74 ]
+valid:  0.6325600147247314
+test:  0.6249322295188904
+	 VALID :  {'MRR': 0.6325600147247314, 'hits@[1,3,10]': tensor([0.5526, 0.6796, 0.7793])}
+	 TEST : {'MRR': 0.6249322295188904, 'hits@[1,3,10]': tensor([0.5443, 0.6727, 0.7742])}
+[ Epoch: 75 ]
+[ Epoch: 76 ]
+[ Epoch: 77 ]
+[ Epoch: 78 ]
+[ Epoch: 79 ]
+valid:  0.633019745349884
+test:  0.6248136460781097
+	 VALID :  {'MRR': 0.633019745349884, 'hits@[1,3,10]': tensor([0.5534, 0.6798, 0.7792])}
+	 TEST : {'MRR': 0.6248136460781097, 'hits@[1,3,10]': tensor([0.5440, 0.6723, 0.7749])}
+[ Epoch: 80 ]
+[ Epoch: 81 ]
+[ Epoch: 82 ]
+[ Epoch: 83 ]
+[ Epoch: 84 ]
+valid:  0.6321367025375366
+test:  0.6246638298034668
+	 VALID :  {'MRR': 0.6321367025375366, 'hits@[1,3,10]': tensor([0.5521, 0.6798, 0.7793])}
+	 TEST : {'MRR': 0.6246638298034668, 'hits@[1,3,10]': tensor([0.5446, 0.6715, 0.7733])}
+[ Epoch: 85 ]
+[ Epoch: 86 ]
+[ Epoch: 87 ]
+[ Epoch: 88 ]
+[ Epoch: 89 ]
+valid:  0.6325659155845642
+test:  0.6234769821166992
+	 VALID :  {'MRR': 0.6325659155845642, 'hits@[1,3,10]': tensor([0.5530, 0.6788, 0.7780])}
+	 TEST : {'MRR': 0.6234769821166992, 'hits@[1,3,10]': tensor([0.5424, 0.6698, 0.7747])}
+[ Epoch: 90 ]
+[ Epoch: 91 ]
+[ Epoch: 92 ]
+[ Epoch: 93 ]
+[ Epoch: 94 ]
+valid:  0.631719559431076
+test:  0.6229276955127716
+	 VALID :  {'MRR': 0.631719559431076, 'hits@[1,3,10]': tensor([0.5515, 0.6797, 0.7781])}
+	 TEST : {'MRR': 0.6229276955127716, 'hits@[1,3,10]': tensor([0.5423, 0.6694, 0.7731])}
+[ Epoch: 95 ]
+[ Epoch: 96 ]
+[ Epoch: 97 ]
+[ Epoch: 98 ]
+[ Epoch: 99 ]
+valid:  0.6309679448604584
+test:  0.6219931244850159
+	 VALID :  {'MRR': 0.6309679448604584, 'hits@[1,3,10]': tensor([0.5509, 0.6777, 0.7780])}
+	 TEST : {'MRR': 0.6219931244850159, 'hits@[1,3,10]': tensor([0.5406, 0.6695, 0.7732])}
+[ Epoch: 100 ]
+[ Epoch: 101 ]
+[ Epoch: 102 ]
+[ Epoch: 103 ]
+[ Epoch: 104 ]
+valid:  0.63124218583107
+test:  0.6211044788360596
+Early stopping ...
+
+
+TEST :  {'MRR': 0.6248136460781097, 'hits@[1,3,10]': tensor([0.5440, 0.6723, 0.7749])}
+Assume all timestamps are regularly spaced
+Not using time intervals and events eval
+Start training process:  TeLM on ICEWS14 using rank = 2110 lr = 0.1 emb_reg = 0.0075 time_reg = 0.01 time_granularity = 1
+
+Model Parameters
+--------------------------
+W.weight 8440 requires_grad=True
+embeddings.0.weight 60160320 requires_grad=True
+embeddings.1.weight 3882400 requires_grad=True
+embeddings.2.weight 3080600 requires_grad=True
+Total # parameters = 67131760
+--------------------------
+
+[ Epoch: 0 ]
+[ Epoch: 1 ]
+[ Epoch: 2 ]
+[ Epoch: 3 ]
+[ Epoch: 4 ]
+valid:  0.6221765875816345
+test:  0.6096988618373871
+	 VALID :  {'MRR': 0.6221765875816345, 'hits@[1,3,10]': tensor([0.5395, 0.6731, 0.7731])}
+	 TEST : {'MRR': 0.6096988618373871, 'hits@[1,3,10]': tensor([0.5242, 0.6621, 0.7634])}
+[ Epoch: 5 ]
+[ Epoch: 6 ]
+[ Epoch: 7 ]
+[ Epoch: 8 ]
+[ Epoch: 9 ]
+valid:  0.628545731306076
+test:  0.6177404820919037
+	 VALID :  {'MRR': 0.628545731306076, 'hits@[1,3,10]': tensor([0.5480, 0.6763, 0.7750])}
+	 TEST : {'MRR': 0.6177404820919037, 'hits@[1,3,10]': tensor([0.5355, 0.6683, 0.7668])}
+[ Epoch: 10 ]
+[ Epoch: 11 ]
+[ Epoch: 12 ]
+[ Epoch: 13 ]
+[ Epoch: 14 ]
+valid:  0.6302439868450165
+test:  0.6196458041667938
+	 VALID :  {'MRR': 0.6302439868450165, 'hits@[1,3,10]': tensor([0.5502, 0.6779, 0.7757])}
+	 TEST : {'MRR': 0.6196458041667938, 'hits@[1,3,10]': tensor([0.5376, 0.6702, 0.7676])}
+[ Epoch: 15 ]
+[ Epoch: 16 ]
+[ Epoch: 17 ]
+[ Epoch: 18 ]
+[ Epoch: 19 ]
+valid:  0.6313859820365906
+test:  0.6198531985282898
+	 VALID :  {'MRR': 0.6313859820365906, 'hits@[1,3,10]': tensor([0.5517, 0.6795, 0.7772])}
+	 TEST : {'MRR': 0.6198531985282898, 'hits@[1,3,10]': tensor([0.5378, 0.6711, 0.7693])}
+[ Epoch: 20 ]
+[ Epoch: 21 ]
+[ Epoch: 22 ]
+[ Epoch: 23 ]
+[ Epoch: 24 ]
+valid:  0.6318944096565247
+test:  0.6201639473438263
+	 VALID :  {'MRR': 0.6318944096565247, 'hits@[1,3,10]': tensor([0.5528, 0.6800, 0.7769])}
+	 TEST : {'MRR': 0.6201639473438263, 'hits@[1,3,10]': tensor([0.5385, 0.6695, 0.7701])}
+[ Epoch: 25 ]
+[ Epoch: 26 ]
+[ Epoch: 27 ]
+[ Epoch: 28 ]
+[ Epoch: 29 ]
+valid:  0.6323291659355164
+test:  0.6208190321922302
+	 VALID :  {'MRR': 0.6323291659355164, 'hits@[1,3,10]': tensor([0.5536, 0.6791, 0.7769])}
+	 TEST : {'MRR': 0.6208190321922302, 'hits@[1,3,10]': tensor([0.5402, 0.6691, 0.7700])}
+[ Epoch: 30 ]
+[ Epoch: 31 ]
+[ Epoch: 32 ]
+[ Epoch: 33 ]
+[ Epoch: 34 ]
+valid:  0.6314208507537842
+test:  0.6213469207286835
+	 VALID :  {'MRR': 0.6314208507537842, 'hits@[1,3,10]': tensor([0.5524, 0.6784, 0.7762])}
+	 TEST : {'MRR': 0.6213469207286835, 'hits@[1,3,10]': tensor([0.5414, 0.6689, 0.7698])}
+[ Epoch: 35 ]
+[ Epoch: 36 ]
+[ Epoch: 37 ]
+[ Epoch: 38 ]
+[ Epoch: 39 ]
+valid:  0.6322879791259766
+test:  0.6205266118049622
+	 VALID :  {'MRR': 0.6322879791259766, 'hits@[1,3,10]': tensor([0.5537, 0.6797, 0.7763])}
+	 TEST : {'MRR': 0.6205266118049622, 'hits@[1,3,10]': tensor([0.5401, 0.6677, 0.7692])}
+[ Epoch: 40 ]
+[ Epoch: 41 ]
+[ Epoch: 42 ]
+[ Epoch: 43 ]
+[ Epoch: 44 ]
+valid:  0.632276177406311
+test:  0.6215811967849731
+	 VALID :  {'MRR': 0.632276177406311, 'hits@[1,3,10]': tensor([0.5545, 0.6795, 0.7763])}
+	 TEST : {'MRR': 0.6215811967849731, 'hits@[1,3,10]': tensor([0.5422, 0.6682, 0.7689])}
+[ Epoch: 45 ]
+[ Epoch: 46 ]
+[ Epoch: 47 ]
+[ Epoch: 48 ]
+[ Epoch: 49 ]
+valid:  0.6317704021930695
+test:  0.6209427714347839
+	 VALID :  {'MRR': 0.6317704021930695, 'hits@[1,3,10]': tensor([0.5534, 0.6789, 0.7761])}
+	 TEST : {'MRR': 0.6209427714347839, 'hits@[1,3,10]': tensor([0.5412, 0.6676, 0.7694])}
+[ Epoch: 50 ]
+[ Epoch: 51 ]
+[ Epoch: 52 ]
+[ Epoch: 53 ]
+[ Epoch: 54 ]
+valid:  0.6252549588680267
+test:  0.6155718266963959
+Early stopping ...
+
+
+TEST :  {'MRR': 0.6208190321922302, 'hits@[1,3,10]': tensor([0.5402, 0.6691, 0.7700])}
+Assume all timestamps are regularly spaced
+Not using time intervals and events eval
+Start training process:  TeLM on ICEWS14 using rank = 2110 lr = 0.1 emb_reg = 0.0075 time_reg = 0.01 time_granularity = 1
+
+Model Parameters
+--------------------------
+W.weight 8440 requires_grad=True
+embeddings.0.weight 60160320 requires_grad=True
+embeddings.1.weight 3882400 requires_grad=True
+embeddings.2.weight 3080600 requires_grad=True
+Total # parameters = 67131760
+--------------------------
+
+[ Epoch: 0 ]
+[ Epoch: 1 ]
+[ Epoch: 2 ]
+[ Epoch: 3 ]
+[ Epoch: 4 ]
+valid:  0.622174084186554
+test:  0.6109530329704285
+	 VALID :  {'MRR': 0.622174084186554, 'hits@[1,3,10]': tensor([0.5376, 0.6764, 0.7749])}
+	 TEST : {'MRR': 0.6109530329704285, 'hits@[1,3,10]': tensor([0.5256, 0.6626, 0.7661])}
+[ Epoch: 5 ]
+[ Epoch: 6 ]
+[ Epoch: 7 ]
+[ Epoch: 8 ]
+[ Epoch: 9 ]
+valid:  0.6280816495418549
+test:  0.6183328032493591
+	 VALID :  {'MRR': 0.6280816495418549, 'hits@[1,3,10]': tensor([0.5462, 0.6778, 0.7761])}
+	 TEST : {'MRR': 0.6183328032493591, 'hits@[1,3,10]': tensor([0.5352, 0.6663, 0.7696])}
+[ Epoch: 10 ]
+[ Epoch: 11 ]
+[ Epoch: 12 ]
+[ Epoch: 13 ]
+[ Epoch: 14 ]
+valid:  0.6297556161880493
+test:  0.6200834512710571
+	 VALID :  {'MRR': 0.6297556161880493, 'hits@[1,3,10]': tensor([0.5482, 0.6801, 0.7776])}
+	 TEST : {'MRR': 0.6200834512710571, 'hits@[1,3,10]': tensor([0.5379, 0.6697, 0.7709])}
+[ Epoch: 15 ]
+[ Epoch: 16 ]
+[ Epoch: 17 ]
+[ Epoch: 18 ]
+[ Epoch: 19 ]
+valid:  0.6308899223804474
+test:  0.6205689609050751
+	 VALID :  {'MRR': 0.6308899223804474, 'hits@[1,3,10]': tensor([0.5502, 0.6802, 0.7764])}
+	 TEST : {'MRR': 0.6205689609050751, 'hits@[1,3,10]': tensor([0.5380, 0.6702, 0.7716])}
+[ Epoch: 20 ]
+[ Epoch: 21 ]
+[ Epoch: 22 ]
+[ Epoch: 23 ]
+[ Epoch: 24 ]
+valid:  0.6312645077705383
+test:  0.6215475499629974
+	 VALID :  {'MRR': 0.6312645077705383, 'hits@[1,3,10]': tensor([0.5507, 0.6803, 0.7771])}
+	 TEST : {'MRR': 0.6215475499629974, 'hits@[1,3,10]': tensor([0.5397, 0.6711, 0.7711])}
+[ Epoch: 25 ]
+[ Epoch: 26 ]
+[ Epoch: 27 ]
+[ Epoch: 28 ]
+[ Epoch: 29 ]
+valid:  0.6315672099590302
+test:  0.6211140155792236
+	 VALID :  {'MRR': 0.6315672099590302, 'hits@[1,3,10]': tensor([0.5517, 0.6801, 0.7764])}
+	 TEST : {'MRR': 0.6211140155792236, 'hits@[1,3,10]': tensor([0.5389, 0.6700, 0.7719])}
+[ Epoch: 30 ]
+[ Epoch: 31 ]
+[ Epoch: 32 ]
+[ Epoch: 33 ]
+[ Epoch: 34 ]
+valid:  0.631348043680191
+test:  0.6217045485973358
+	 VALID :  {'MRR': 0.631348043680191, 'hits@[1,3,10]': tensor([0.5512, 0.6796, 0.7760])}
+	 TEST : {'MRR': 0.6217045485973358, 'hits@[1,3,10]': tensor([0.5401, 0.6696, 0.7722])}
+[ Epoch: 35 ]
+[ Epoch: 36 ]
+[ Epoch: 37 ]
+[ Epoch: 38 ]
+[ Epoch: 39 ]
+valid:  0.6321291923522949
+test:  0.621942937374115
+	 VALID :  {'MRR': 0.6321291923522949, 'hits@[1,3,10]': tensor([0.5525, 0.6805, 0.7756])}
+	 TEST : {'MRR': 0.621942937374115, 'hits@[1,3,10]': tensor([0.5410, 0.6701, 0.7712])}
+[ Epoch: 40 ]
+[ Epoch: 41 ]
+[ Epoch: 42 ]
+[ Epoch: 43 ]
+[ Epoch: 44 ]
+valid:  0.6319186091423035
+test:  0.6218435168266296
+	 VALID :  {'MRR': 0.6319186091423035, 'hits@[1,3,10]': tensor([0.5529, 0.6795, 0.7751])}
+	 TEST : {'MRR': 0.6218435168266296, 'hits@[1,3,10]': tensor([0.5407, 0.6689, 0.7715])}
+[ Epoch: 45 ]
+[ Epoch: 46 ]
+[ Epoch: 47 ]
+[ Epoch: 48 ]
+[ Epoch: 49 ]
+valid:  0.6313603222370148
+test:  0.621355265378952
+	 VALID :  {'MRR': 0.6313603222370148, 'hits@[1,3,10]': tensor([0.5519, 0.6803, 0.7751])}
+	 TEST : {'MRR': 0.621355265378952, 'hits@[1,3,10]': tensor([0.5403, 0.6690, 0.7718])}
+[ Epoch: 50 ]
+[ Epoch: 51 ]
+[ Epoch: 52 ]
+[ Epoch: 53 ]
+[ Epoch: 54 ]
+valid:  0.6281848847866058
+test:  0.6175738275051117
+	 VALID :  {'MRR': 0.6281848847866058, 'hits@[1,3,10]': tensor([0.5481, 0.6776, 0.7733])}
+	 TEST : {'MRR': 0.6175738275051117, 'hits@[1,3,10]': tensor([0.5363, 0.6652, 0.7667])}
+[ Epoch: 55 ]
+[ Epoch: 56 ]
+[ Epoch: 57 ]
+[ Epoch: 58 ]
+[ Epoch: 59 ]
+valid:  0.6327973902225494
+test:  0.620476096868515
+	 VALID :  {'MRR': 0.6327973902225494, 'hits@[1,3,10]': tensor([0.5545, 0.6805, 0.7762])}
+	 TEST : {'MRR': 0.620476096868515, 'hits@[1,3,10]': tensor([0.5389, 0.6682, 0.7707])}
+[ Epoch: 60 ]
+[ Epoch: 61 ]
+[ Epoch: 62 ]
+[ Epoch: 63 ]
+[ Epoch: 64 ]
+valid:  0.6347273290157318
+test:  0.6231307685375214
+	 VALID :  {'MRR': 0.6347273290157318, 'hits@[1,3,10]': tensor([0.5556, 0.6817, 0.7782])}
+	 TEST : {'MRR': 0.6231307685375214, 'hits@[1,3,10]': tensor([0.5421, 0.6703, 0.7725])}
+[ Epoch: 65 ]
+[ Epoch: 66 ]
+[ Epoch: 67 ]
+[ Epoch: 68 ]
+[ Epoch: 69 ]
+valid:  0.6357855796813965
+test:  0.6238252222537994
+	 VALID :  {'MRR': 0.6357855796813965, 'hits@[1,3,10]': tensor([0.5570, 0.6826, 0.7798])}
+	 TEST : {'MRR': 0.6238252222537994, 'hits@[1,3,10]': tensor([0.5426, 0.6711, 0.7731])}
+[ Epoch: 70 ]
+[ Epoch: 71 ]
+[ Epoch: 72 ]
+[ Epoch: 73 ]
+[ Epoch: 74 ]
+valid:  0.6350587010383606
+test:  0.623760461807251
+	 VALID :  {'MRR': 0.6350587010383606, 'hits@[1,3,10]': tensor([0.5556, 0.6833, 0.7785])}
+	 TEST : {'MRR': 0.623760461807251, 'hits@[1,3,10]': tensor([0.5432, 0.6701, 0.7725])}
+[ Epoch: 75 ]
+[ Epoch: 76 ]
+[ Epoch: 77 ]
+[ Epoch: 78 ]
+[ Epoch: 79 ]
+valid:  0.635978639125824
+test:  0.6230564713478088
+	 VALID :  {'MRR': 0.635978639125824, 'hits@[1,3,10]': tensor([0.5569, 0.6823, 0.7807])}
+	 TEST : {'MRR': 0.6230564713478088, 'hits@[1,3,10]': tensor([0.5416, 0.6699, 0.7727])}
+[ Epoch: 80 ]
+[ Epoch: 81 ]
+[ Epoch: 82 ]
+[ Epoch: 83 ]
+[ Epoch: 84 ]
+valid:  0.6350823640823364
+test:  0.6234930157661438
+	 VALID :  {'MRR': 0.6350823640823364, 'hits@[1,3,10]': tensor([0.5557, 0.6817, 0.7792])}
+	 TEST : {'MRR': 0.6234930157661438, 'hits@[1,3,10]': tensor([0.5421, 0.6706, 0.7725])}
+[ Epoch: 85 ]
+[ Epoch: 86 ]
+[ Epoch: 87 ]
+[ Epoch: 88 ]
+[ Epoch: 89 ]
+valid:  0.6347225904464722
+test:  0.622158020734787
+	 VALID :  {'MRR': 0.6347225904464722, 'hits@[1,3,10]': tensor([0.5560, 0.6816, 0.7787])}
+	 TEST : {'MRR': 0.622158020734787, 'hits@[1,3,10]': tensor([0.5399, 0.6697, 0.7720])}
+[ Epoch: 90 ]
+[ Epoch: 91 ]
+[ Epoch: 92 ]
+[ Epoch: 93 ]
+[ Epoch: 94 ]
+valid:  0.6350242793560028
+test:  0.6223425269126892
+	 VALID :  {'MRR': 0.6350242793560028, 'hits@[1,3,10]': tensor([0.5569, 0.6800, 0.7787])}
+	 TEST : {'MRR': 0.6223425269126892, 'hits@[1,3,10]': tensor([0.5414, 0.6701, 0.7717])}
+[ Epoch: 95 ]
+[ Epoch: 96 ]
+[ Epoch: 97 ]
+[ Epoch: 98 ]
+[ Epoch: 99 ]
+valid:  0.6332012712955475
+test:  0.6216980814933777
+	 VALID :  {'MRR': 0.6332012712955475, 'hits@[1,3,10]': tensor([0.5542, 0.6798, 0.7779])}
+	 TEST : {'MRR': 0.6216980814933777, 'hits@[1,3,10]': tensor([0.5404, 0.6683, 0.7720])}
+[ Epoch: 100 ]
+[ Epoch: 101 ]
+[ Epoch: 102 ]
+[ Epoch: 103 ]
+[ Epoch: 104 ]
+valid:  0.6327041685581207
+test:  0.6208712756633759
+Early stopping ...
+
+
+TEST :  {'MRR': 0.6230564713478088, 'hits@[1,3,10]': tensor([0.5416, 0.6699, 0.7727])}

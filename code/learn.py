@@ -237,7 +237,7 @@ if args.do_train:
                 # print(ratio_2, ratio_5, ratio_10)
                 # print(torch.norm(model.W, 2)/a/b/c, model.W.max())
                            
-        test = avg_both(*dataset.eval(model, 'test', 50000))
+        test = avg_both(*dataset.eval(model, 'test', -1))
         log_file.write("\t TEST: {}\n".format(test))
         print("\t TEST : ", test)
 

@@ -58,4 +58,4 @@ class KBCOptimizer(object):
                 self.optimizer.step()
                 b_begin += self.batch_size
                 bar.update(input_batch.shape[0])
-                bar.set_postfix(loss=f'{l.item():.1f}', reg=f'{l_reg.item():.1f}', reg_t=f'{l_t.item():.3f}', reg_w=f'{l_w.item():.2f}')
+                bar.set_postfix(loss=f'{l.item():.1f}', reg=f'{l_reg.item():.2f}', reg_t=f'{l_t.item():.3f}', reg_w=f'{l_w.item():.2f}')

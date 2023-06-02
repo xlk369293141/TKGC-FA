@@ -1,0 +1,605 @@
+Assume all timestamps are regularly spaced
+Not using time intervals and events eval
+Start training process:  TeLM on ICEWS14 using rank = 2110 lr = 0.1 emb_reg = 0.0075 time_reg = 0.01 time_granularity = 1
+
+Model Parameters
+--------------------------
+W.weight 8440 requires_grad=True
+embeddings.0.weight 60160320 requires_grad=True
+embeddings.1.weight 3882400 requires_grad=True
+embeddings.2.weight 3080600 requires_grad=True
+Total # parameters = 67131760
+--------------------------
+
+[ Epoch: 0 ]
+[ Epoch: 1 ]
+[ Epoch: 2 ]
+[ Epoch: 3 ]
+[ Epoch: 4 ]
+	 TRAIN:  {'MRR': 0.9820143580436707, 'hits@[1,3,10]': tensor([0.9687, 0.9952, 0.9991])}
+	 VALID :  {'MRR': 0.6203667521476746, 'hits@[1,3,10]': tensor([0.5355, 0.6736, 0.7716])}
+[ Epoch: 5 ]
+[ Epoch: 6 ]
+[ Epoch: 7 ]
+[ Epoch: 8 ]
+[ Epoch: 9 ]
+	 TRAIN:  {'MRR': 0.9931767284870148, 'hits@[1,3,10]': tensor([0.9878, 0.9986, 0.9997])}
+	 VALID :  {'MRR': 0.6263241767883301, 'hits@[1,3,10]': tensor([0.5438, 0.6779, 0.7752])}
+[ Epoch: 10 ]
+[ Epoch: 11 ]
+[ Epoch: 12 ]
+[ Epoch: 13 ]
+[ Epoch: 14 ]
+	 TRAIN:  {'MRR': 0.9958645701408386, 'hits@[1,3,10]': tensor([0.9925, 0.9992, 0.9998])}
+	 VALID :  {'MRR': 0.6291791796684265, 'hits@[1,3,10]': tensor([0.5474, 0.6798, 0.7770])}
+[ Epoch: 15 ]
+[ Epoch: 16 ]
+[ Epoch: 17 ]
+[ Epoch: 18 ]
+[ Epoch: 19 ]
+	 TRAIN:  {'MRR': 0.997392326593399, 'hits@[1,3,10]': tensor([0.9952, 0.9996, 0.9999])}
+	 VALID :  {'MRR': 0.6294349431991577, 'hits@[1,3,10]': tensor([0.5480, 0.6809, 0.7763])}
+[ Epoch: 20 ]
+[ Epoch: 21 ]
+[ Epoch: 22 ]
+[ Epoch: 23 ]
+[ Epoch: 24 ]
+	 TRAIN:  {'MRR': 0.9979753494262695, 'hits@[1,3,10]': tensor([0.9963, 0.9997, 0.9999])}
+	 VALID :  {'MRR': 0.6307923495769501, 'hits@[1,3,10]': tensor([0.5495, 0.6820, 0.7769])}
+[ Epoch: 25 ]
+[ Epoch: 26 ]
+[ Epoch: 27 ]
+[ Epoch: 28 ]
+[ Epoch: 29 ]
+	 TRAIN:  {'MRR': 0.9984453022480011, 'hits@[1,3,10]': tensor([0.9972, 0.9997, 1.0000])}
+	 VALID :  {'MRR': 0.6307118833065033, 'hits@[1,3,10]': tensor([0.5494, 0.6820, 0.7768])}
+[ Epoch: 30 ]
+[ Epoch: 31 ]
+[ Epoch: 32 ]
+[ Epoch: 33 ]
+[ Epoch: 34 ]
+	 TRAIN:  {'MRR': 0.9986411929130554, 'hits@[1,3,10]': tensor([0.9975, 0.9998, 1.0000])}
+	 VALID :  {'MRR': 0.6305476129055023, 'hits@[1,3,10]': tensor([0.5490, 0.6824, 0.7766])}
+[ Epoch: 35 ]
+[ Epoch: 36 ]
+[ Epoch: 37 ]
+[ Epoch: 38 ]
+[ Epoch: 39 ]
+	 TRAIN:  {'MRR': 0.9988977015018463, 'hits@[1,3,10]': tensor([0.9980, 0.9998, 1.0000])}
+	 VALID :  {'MRR': 0.6311632096767426, 'hits@[1,3,10]': tensor([0.5506, 0.6819, 0.7777])}
+[ Epoch: 40 ]
+[ Epoch: 41 ]
+[ Epoch: 42 ]
+[ Epoch: 43 ]
+[ Epoch: 44 ]
+	 TRAIN:  {'MRR': 0.9990867078304291, 'hits@[1,3,10]': tensor([0.9983, 0.9999, 1.0000])}
+	 VALID :  {'MRR': 0.6308199763298035, 'hits@[1,3,10]': tensor([0.5502, 0.6815, 0.7772])}
+[ Epoch: 45 ]
+[ Epoch: 46 ]
+[ Epoch: 47 ]
+[ Epoch: 48 ]
+[ Epoch: 49 ]
+	 TRAIN:  {'MRR': 0.9991844594478607, 'hits@[1,3,10]': tensor([0.9985, 0.9999, 1.0000])}
+	 VALID :  {'MRR': 0.6303435266017914, 'hits@[1,3,10]': tensor([0.5486, 0.6817, 0.7775])}
+[ Epoch: 50 ]
+[ Epoch: 51 ]
+[ Epoch: 52 ]
+[ Epoch: 53 ]
+[ Epoch: 54 ]
+	 TRAIN:  {'MRR': 0.9956446886062622, 'hits@[1,3,10]': tensor([0.9920, 0.9993, 0.9999])}
+	 VALID :  {'MRR': 0.6260612607002258, 'hits@[1,3,10]': tensor([0.5441, 0.6779, 0.7726])}
+[ Epoch: 55 ]
+[ Epoch: 56 ]
+[ Epoch: 57 ]
+[ Epoch: 58 ]
+[ Epoch: 59 ]
+	 TRAIN:  {'MRR': 0.9984536468982697, 'hits@[1,3,10]': tensor([0.9971, 0.9999, 1.0000])}
+	 VALID :  {'MRR': 0.6301620900630951, 'hits@[1,3,10]': tensor([0.5488, 0.6811, 0.7769])}
+[ Epoch: 60 ]
+[ Epoch: 61 ]
+[ Epoch: 62 ]
+[ Epoch: 63 ]
+[ Epoch: 64 ]
+	 TRAIN:  {'MRR': 0.9991865158081055, 'hits@[1,3,10]': tensor([0.9985, 0.9999, 1.0000])}
+	 VALID :  {'MRR': 0.6328143775463104, 'hits@[1,3,10]': tensor([0.5518, 0.6825, 0.7794])}
+[ Epoch: 65 ]
+[ Epoch: 66 ]
+[ Epoch: 67 ]
+[ Epoch: 68 ]
+[ Epoch: 69 ]
+	 TRAIN:  {'MRR': 0.9995113909244537, 'hits@[1,3,10]': tensor([0.9991, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6332586109638214, 'hits@[1,3,10]': tensor([0.5521, 0.6835, 0.7806])}
+[ Epoch: 70 ]
+[ Epoch: 71 ]
+[ Epoch: 72 ]
+[ Epoch: 73 ]
+[ Epoch: 74 ]
+	 TRAIN:  {'MRR': 0.9995827972888947, 'hits@[1,3,10]': tensor([0.9992, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6330792307853699, 'hits@[1,3,10]': tensor([0.5514, 0.6842, 0.7792])}
+[ Epoch: 75 ]
+[ Epoch: 76 ]
+[ Epoch: 77 ]
+[ Epoch: 78 ]
+[ Epoch: 79 ]
+	 TRAIN:  {'MRR': 0.9997770190238953, 'hits@[1,3,10]': tensor([0.9996, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6338537037372589, 'hits@[1,3,10]': tensor([0.5529, 0.6838, 0.7803])}
+[ Epoch: 80 ]
+[ Epoch: 81 ]
+[ Epoch: 82 ]
+[ Epoch: 83 ]
+[ Epoch: 84 ]
+	 TRAIN:  {'MRR': 0.9998466670513153, 'hits@[1,3,10]': tensor([0.9997, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.633823812007904, 'hits@[1,3,10]': tensor([0.5533, 0.6834, 0.7798])}
+[ Epoch: 85 ]
+[ Epoch: 86 ]
+[ Epoch: 87 ]
+[ Epoch: 88 ]
+[ Epoch: 89 ]
+	 TRAIN:  {'MRR': 0.9998016953468323, 'hits@[1,3,10]': tensor([0.9996, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6335146129131317, 'hits@[1,3,10]': tensor([0.5531, 0.6830, 0.7806])}
+[ Epoch: 90 ]
+[ Epoch: 91 ]
+[ Epoch: 92 ]
+[ Epoch: 93 ]
+[ Epoch: 94 ]
+	 TRAIN:  {'MRR': 0.9998858571052551, 'hits@[1,3,10]': tensor([0.9998, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.632328450679779, 'hits@[1,3,10]': tensor([0.5520, 0.6821, 0.7793])}
+[ Epoch: 95 ]
+[ Epoch: 96 ]
+[ Epoch: 97 ]
+[ Epoch: 98 ]
+[ Epoch: 99 ]
+	 TRAIN:  {'MRR': 0.999913364648819, 'hits@[1,3,10]': tensor([0.9998, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6316424906253815, 'hits@[1,3,10]': tensor([0.5509, 0.6818, 0.7784])}
+[ Epoch: 100 ]
+[ Epoch: 101 ]
+[ Epoch: 102 ]
+[ Epoch: 103 ]
+[ Epoch: 104 ]
+	 TRAIN:  {'MRR': 0.9999333620071411, 'hits@[1,3,10]': tensor([0.9999, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6318299472332001, 'hits@[1,3,10]': tensor([0.5517, 0.6817, 0.7777])}
+[ Epoch: 105 ]
+[ Epoch: 106 ]
+[ Epoch: 107 ]
+[ Epoch: 108 ]
+[ Epoch: 109 ]
+	 TRAIN:  {'MRR': 0.9999533295631409, 'hits@[1,3,10]': tensor([0.9999, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6307716369628906, 'hits@[1,3,10]': tensor([0.5501, 0.6797, 0.7773])}
+[ Epoch: 110 ]
+[ Epoch: 111 ]
+[ Epoch: 112 ]
+[ Epoch: 113 ]
+[ Epoch: 114 ]
+	 TRAIN:  {'MRR': 0.9999608099460602, 'hits@[1,3,10]': tensor([0.9999, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6297855973243713, 'hits@[1,3,10]': tensor([0.5492, 0.6785, 0.7754])}
+[ Epoch: 115 ]
+[ Epoch: 116 ]
+[ Epoch: 117 ]
+[ Epoch: 118 ]
+[ Epoch: 119 ]
+	 TRAIN:  {'MRR': 0.9999516904354095, 'hits@[1,3,10]': tensor([0.9999, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6294810473918915, 'hits@[1,3,10]': tensor([0.5490, 0.6788, 0.7756])}
+[ Epoch: 120 ]
+[ Epoch: 121 ]
+[ Epoch: 122 ]
+[ Epoch: 123 ]
+[ Epoch: 124 ]
+	 TRAIN:  {'MRR': 0.9999600052833557, 'hits@[1,3,10]': tensor([0.9999, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6293447911739349, 'hits@[1,3,10]': tensor([0.5492, 0.6779, 0.7757])}
+[ Epoch: 125 ]
+[ Epoch: 126 ]
+[ Epoch: 127 ]
+[ Epoch: 128 ]
+[ Epoch: 129 ]
+Early stopping ...
+
+
+TEST :  {'MRR': 0.6254551410675049, 'hits@[1,3,10]': tensor([0.5455, 0.6722, 0.7730])}
+Assume all timestamps are regularly spaced
+Not using time intervals and events eval
+Start training process:  TeLM on ICEWS14 using rank = 2210 lr = 0.1 emb_reg = 0.0075 time_reg = 0.01 time_granularity = 1
+
+Model Parameters
+--------------------------
+W.weight 8840 requires_grad=True
+embeddings.0.weight 63011520 requires_grad=True
+embeddings.1.weight 4066400 requires_grad=True
+embeddings.2.weight 3226600 requires_grad=True
+Total # parameters = 70313360
+--------------------------
+
+[ Epoch: 0 ]
+[ Epoch: 1 ]
+[ Epoch: 2 ]
+[ Epoch: 3 ]
+[ Epoch: 4 ]
+	 TRAIN:  {'MRR': 0.9815646111965179, 'hits@[1,3,10]': tensor([0.9679, 0.9952, 0.9991])}
+	 VALID :  {'MRR': 0.6207566261291504, 'hits@[1,3,10]': tensor([0.5367, 0.6740, 0.7729])}
+[ Epoch: 5 ]
+[ Epoch: 6 ]
+[ Epoch: 7 ]
+[ Epoch: 8 ]
+[ Epoch: 9 ]
+	 TRAIN:  {'MRR': 0.9935978949069977, 'hits@[1,3,10]': tensor([0.9884, 0.9988, 0.9996])}
+	 VALID :  {'MRR': 0.6270183324813843, 'hits@[1,3,10]': tensor([0.5455, 0.6779, 0.7750])}
+[ Epoch: 10 ]
+[ Epoch: 11 ]
+[ Epoch: 12 ]
+[ Epoch: 13 ]
+[ Epoch: 14 ]
+	 TRAIN:  {'MRR': 0.9964917004108429, 'hits@[1,3,10]': tensor([0.9937, 0.9993, 0.9998])}
+	 VALID :  {'MRR': 0.628866970539093, 'hits@[1,3,10]': tensor([0.5478, 0.6795, 0.7752])}
+[ Epoch: 15 ]
+[ Epoch: 16 ]
+[ Epoch: 17 ]
+[ Epoch: 18 ]
+[ Epoch: 19 ]
+	 TRAIN:  {'MRR': 0.9974485337734222, 'hits@[1,3,10]': tensor([0.9954, 0.9996, 0.9999])}
+	 VALID :  {'MRR': 0.6296625733375549, 'hits@[1,3,10]': tensor([0.5490, 0.6809, 0.7745])}
+[ Epoch: 20 ]
+[ Epoch: 21 ]
+[ Epoch: 22 ]
+[ Epoch: 23 ]
+[ Epoch: 24 ]
+	 TRAIN:  {'MRR': 0.9982426464557648, 'hits@[1,3,10]': tensor([0.9968, 0.9997, 1.0000])}
+	 VALID :  {'MRR': 0.6305325329303741, 'hits@[1,3,10]': tensor([0.5503, 0.6794, 0.7758])}
+[ Epoch: 25 ]
+[ Epoch: 26 ]
+[ Epoch: 27 ]
+[ Epoch: 28 ]
+[ Epoch: 29 ]
+	 TRAIN:  {'MRR': 0.9985437393188477, 'hits@[1,3,10]': tensor([0.9973, 0.9997, 0.9999])}
+	 VALID :  {'MRR': 0.631078451871872, 'hits@[1,3,10]': tensor([0.5512, 0.6798, 0.7767])}
+[ Epoch: 30 ]
+[ Epoch: 31 ]
+[ Epoch: 32 ]
+[ Epoch: 33 ]
+[ Epoch: 34 ]
+	 TRAIN:  {'MRR': 0.9987898468971252, 'hits@[1,3,10]': tensor([0.9978, 0.9998, 1.0000])}
+	 VALID :  {'MRR': 0.631523460149765, 'hits@[1,3,10]': tensor([0.5521, 0.6795, 0.7765])}
+[ Epoch: 35 ]
+[ Epoch: 36 ]
+[ Epoch: 37 ]
+[ Epoch: 38 ]
+[ Epoch: 39 ]
+	 TRAIN:  {'MRR': 0.9991062879562378, 'hits@[1,3,10]': tensor([0.9984, 0.9999, 1.0000])}
+	 VALID :  {'MRR': 0.6314244568347931, 'hits@[1,3,10]': tensor([0.5518, 0.6799, 0.7768])}
+[ Epoch: 40 ]
+[ Epoch: 41 ]
+[ Epoch: 42 ]
+[ Epoch: 43 ]
+[ Epoch: 44 ]
+	 TRAIN:  {'MRR': 0.9992137253284454, 'hits@[1,3,10]': tensor([0.9986, 0.9999, 1.0000])}
+	 VALID :  {'MRR': 0.6313877105712891, 'hits@[1,3,10]': tensor([0.5516, 0.6800, 0.7761])}
+[ Epoch: 45 ]
+[ Epoch: 46 ]
+[ Epoch: 47 ]
+[ Epoch: 48 ]
+[ Epoch: 49 ]
+	 TRAIN:  {'MRR': 0.9993319809436798, 'hits@[1,3,10]': tensor([0.9988, 0.9999, 1.0000])}
+	 VALID :  {'MRR': 0.6312266290187836, 'hits@[1,3,10]': tensor([0.5519, 0.6791, 0.7758])}
+[ Epoch: 50 ]
+[ Epoch: 51 ]
+[ Epoch: 52 ]
+[ Epoch: 53 ]
+[ Epoch: 54 ]
+	 TRAIN:  {'MRR': 0.9958083033561707, 'hits@[1,3,10]': tensor([0.9924, 0.9993, 0.9999])}
+	 VALID :  {'MRR': 0.62598517537117, 'hits@[1,3,10]': tensor([0.5452, 0.6757, 0.7725])}
+[ Epoch: 55 ]
+[ Epoch: 56 ]
+[ Epoch: 57 ]
+[ Epoch: 58 ]
+[ Epoch: 59 ]
+	 TRAIN:  {'MRR': 0.9984319508075714, 'hits@[1,3,10]': tensor([0.9971, 0.9998, 1.0000])}
+	 VALID :  {'MRR': 0.6297570765018463, 'hits@[1,3,10]': tensor([0.5490, 0.6806, 0.7762])}
+[ Epoch: 60 ]
+[ Epoch: 61 ]
+[ Epoch: 62 ]
+[ Epoch: 63 ]
+[ Epoch: 64 ]
+	 TRAIN:  {'MRR': 0.9991026222705841, 'hits@[1,3,10]': tensor([0.9983, 0.9999, 1.0000])}
+	 VALID :  {'MRR': 0.6316591203212738, 'hits@[1,3,10]': tensor([0.5508, 0.6808, 0.7784])}
+[ Epoch: 65 ]
+[ Epoch: 66 ]
+[ Epoch: 67 ]
+[ Epoch: 68 ]
+[ Epoch: 69 ]
+	 TRAIN:  {'MRR': 0.9995491802692413, 'hits@[1,3,10]': tensor([0.9992, 0.9999, 1.0000])}
+	 VALID :  {'MRR': 0.6330861151218414, 'hits@[1,3,10]': tensor([0.5527, 0.6826, 0.7784])}
+[ Epoch: 70 ]
+[ Epoch: 71 ]
+[ Epoch: 72 ]
+[ Epoch: 73 ]
+[ Epoch: 74 ]
+	 TRAIN:  {'MRR': 0.9997069835662842, 'hits@[1,3,10]': tensor([0.9995, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6336625814437866, 'hits@[1,3,10]': tensor([0.5534, 0.6828, 0.7795])}
+[ Epoch: 75 ]
+[ Epoch: 76 ]
+[ Epoch: 77 ]
+[ Epoch: 78 ]
+[ Epoch: 79 ]
+	 TRAIN:  {'MRR': 0.9997513890266418, 'hits@[1,3,10]': tensor([0.9995, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6337573528289795, 'hits@[1,3,10]': tensor([0.5533, 0.6830, 0.7803])}
+[ Epoch: 80 ]
+[ Epoch: 81 ]
+[ Epoch: 82 ]
+[ Epoch: 83 ]
+[ Epoch: 84 ]
+	 TRAIN:  {'MRR': 0.9997916519641876, 'hits@[1,3,10]': tensor([0.9996, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6338058710098267, 'hits@[1,3,10]': tensor([0.5536, 0.6832, 0.7802])}
+[ Epoch: 85 ]
+[ Epoch: 86 ]
+[ Epoch: 87 ]
+[ Epoch: 88 ]
+[ Epoch: 89 ]
+	 TRAIN:  {'MRR': 0.9998677968978882, 'hits@[1,3,10]': tensor([0.9998, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6331096887588501, 'hits@[1,3,10]': tensor([0.5526, 0.6827, 0.7808])}
+[ Epoch: 90 ]
+[ Epoch: 91 ]
+[ Epoch: 92 ]
+[ Epoch: 93 ]
+[ Epoch: 94 ]
+	 TRAIN:  {'MRR': 0.9999350011348724, 'hits@[1,3,10]': tensor([0.9999, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6324852108955383, 'hits@[1,3,10]': tensor([0.5523, 0.6815, 0.7794])}
+[ Epoch: 95 ]
+[ Epoch: 96 ]
+[ Epoch: 97 ]
+[ Epoch: 98 ]
+[ Epoch: 99 ]
+	 TRAIN:  {'MRR': 0.9999033808708191, 'hits@[1,3,10]': tensor([0.9998, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6317214965820312, 'hits@[1,3,10]': tensor([0.5515, 0.6812, 0.7793])}
+[ Epoch: 100 ]
+[ Epoch: 101 ]
+[ Epoch: 102 ]
+[ Epoch: 103 ]
+[ Epoch: 104 ]
+	 TRAIN:  {'MRR': 0.9999116957187653, 'hits@[1,3,10]': tensor([0.9998, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6316269040107727, 'hits@[1,3,10]': tensor([0.5519, 0.6788, 0.7783])}
+[ Epoch: 105 ]
+[ Epoch: 106 ]
+[ Epoch: 107 ]
+[ Epoch: 108 ]
+[ Epoch: 109 ]
+	 TRAIN:  {'MRR': 0.9999183714389801, 'hits@[1,3,10]': tensor([0.9998, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6313160955905914, 'hits@[1,3,10]': tensor([0.5519, 0.6779, 0.7784])}
+[ Epoch: 110 ]
+[ Epoch: 111 ]
+[ Epoch: 112 ]
+[ Epoch: 113 ]
+[ Epoch: 114 ]
+	 TRAIN:  {'MRR': 0.9999433755874634, 'hits@[1,3,10]': tensor([0.9999, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6302217543125153, 'hits@[1,3,10]': tensor([0.5505, 0.6775, 0.7777])}
+[ Epoch: 115 ]
+[ Epoch: 116 ]
+[ Epoch: 117 ]
+[ Epoch: 118 ]
+[ Epoch: 119 ]
+	 TRAIN:  {'MRR': 0.9999350011348724, 'hits@[1,3,10]': tensor([0.9999, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6299595236778259, 'hits@[1,3,10]': tensor([0.5502, 0.6772, 0.7772])}
+[ Epoch: 120 ]
+[ Epoch: 121 ]
+[ Epoch: 122 ]
+[ Epoch: 123 ]
+[ Epoch: 124 ]
+	 TRAIN:  {'MRR': 0.9999333620071411, 'hits@[1,3,10]': tensor([0.9999, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6287521123886108, 'hits@[1,3,10]': tensor([0.5488, 0.6763, 0.7756])}
+[ Epoch: 125 ]
+[ Epoch: 126 ]
+[ Epoch: 127 ]
+[ Epoch: 128 ]
+[ Epoch: 129 ]
+	 TRAIN:  {'MRR': 0.9999650120735168, 'hits@[1,3,10]': tensor([0.9999, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6281598806381226, 'hits@[1,3,10]': tensor([0.5480, 0.6757, 0.7750])}
+[ Epoch: 130 ]
+[ Epoch: 131 ]
+[ Epoch: 132 ]
+[ Epoch: 133 ]
+[ Epoch: 134 ]
+Early stopping ...
+
+
+TEST :  {'MRR': 0.6240443289279938, 'hits@[1,3,10]': tensor([0.5454, 0.6690, 0.7727])}
+Assume all timestamps are regularly spaced
+Not using time intervals and events eval
+Start training process:  TeLM on ICEWS14 using rank = 2210 lr = 0.1 emb_reg = 0.0075 time_reg = 0.01 time_granularity = 1
+
+Model Parameters
+--------------------------
+W.weight 8840 requires_grad=True
+embeddings.0.weight 63011520 requires_grad=True
+embeddings.1.weight 4066400 requires_grad=True
+embeddings.2.weight 3226600 requires_grad=True
+Total # parameters = 70313360
+--------------------------
+
+[ Epoch: 0 ]
+[ Epoch: 1 ]
+[ Epoch: 2 ]
+[ Epoch: 3 ]
+[ Epoch: 4 ]
+	 TRAIN:  {'MRR': 0.9821797609329224, 'hits@[1,3,10]': tensor([0.9691, 0.9949, 0.9993])}
+	 VALID :  {'MRR': 0.6200850903987885, 'hits@[1,3,10]': tensor([0.5352, 0.6735, 0.7717])}
+[ Epoch: 5 ]
+[ Epoch: 6 ]
+[ Epoch: 7 ]
+[ Epoch: 8 ]
+[ Epoch: 9 ]
+	 TRAIN:  {'MRR': 0.9938528835773468, 'hits@[1,3,10]': tensor([0.9889, 0.9988, 0.9998])}
+	 VALID :  {'MRR': 0.627112090587616, 'hits@[1,3,10]': tensor([0.5452, 0.6774, 0.7744])}
+[ Epoch: 10 ]
+[ Epoch: 11 ]
+[ Epoch: 12 ]
+[ Epoch: 13 ]
+[ Epoch: 14 ]
+	 TRAIN:  {'MRR': 0.9964790046215057, 'hits@[1,3,10]': tensor([0.9935, 0.9995, 0.9999])}
+	 VALID :  {'MRR': 0.6296524405479431, 'hits@[1,3,10]': tensor([0.5489, 0.6795, 0.7742])}
+[ Epoch: 15 ]
+[ Epoch: 16 ]
+[ Epoch: 17 ]
+[ Epoch: 18 ]
+[ Epoch: 19 ]
+	 TRAIN:  {'MRR': 0.9976175129413605, 'hits@[1,3,10]': tensor([0.9956, 0.9997, 0.9999])}
+	 VALID :  {'MRR': 0.6299135982990265, 'hits@[1,3,10]': tensor([0.5494, 0.6791, 0.7744])}
+[ Epoch: 20 ]
+[ Epoch: 21 ]
+[ Epoch: 22 ]
+[ Epoch: 23 ]
+[ Epoch: 24 ]
+	 TRAIN:  {'MRR': 0.9983668923377991, 'hits@[1,3,10]': tensor([0.9970, 0.9998, 0.9999])}
+	 VALID :  {'MRR': 0.6305535137653351, 'hits@[1,3,10]': tensor([0.5514, 0.6788, 0.7755])}
+[ Epoch: 25 ]
+[ Epoch: 26 ]
+[ Epoch: 27 ]
+[ Epoch: 28 ]
+[ Epoch: 29 ]
+	 TRAIN:  {'MRR': 0.9987019598484039, 'hits@[1,3,10]': tensor([0.9976, 0.9998, 1.0000])}
+	 VALID :  {'MRR': 0.6312669217586517, 'hits@[1,3,10]': tensor([0.5523, 0.6784, 0.7752])}
+[ Epoch: 30 ]
+[ Epoch: 31 ]
+[ Epoch: 32 ]
+[ Epoch: 33 ]
+[ Epoch: 34 ]
+	 TRAIN:  {'MRR': 0.9988904297351837, 'hits@[1,3,10]': tensor([0.9979, 0.9999, 1.0000])}
+	 VALID :  {'MRR': 0.6319756209850311, 'hits@[1,3,10]': tensor([0.5537, 0.6774, 0.7756])}
+[ Epoch: 35 ]
+[ Epoch: 36 ]
+[ Epoch: 37 ]
+[ Epoch: 38 ]
+[ Epoch: 39 ]
+	 TRAIN:  {'MRR': 0.9990435242652893, 'hits@[1,3,10]': tensor([0.9983, 0.9998, 1.0000])}
+	 VALID :  {'MRR': 0.631679356098175, 'hits@[1,3,10]': tensor([0.5532, 0.6780, 0.7753])}
+[ Epoch: 40 ]
+[ Epoch: 41 ]
+[ Epoch: 42 ]
+[ Epoch: 43 ]
+[ Epoch: 44 ]
+	 TRAIN:  {'MRR': 0.9992808699607849, 'hits@[1,3,10]': tensor([0.9987, 0.9999, 1.0000])}
+	 VALID :  {'MRR': 0.6312558352947235, 'hits@[1,3,10]': tensor([0.5526, 0.6778, 0.7742])}
+[ Epoch: 45 ]
+[ Epoch: 46 ]
+[ Epoch: 47 ]
+[ Epoch: 48 ]
+[ Epoch: 49 ]
+	 TRAIN:  {'MRR': 0.9993901550769806, 'hits@[1,3,10]': tensor([0.9989, 0.9999, 1.0000])}
+	 VALID :  {'MRR': 0.6316744387149811, 'hits@[1,3,10]': tensor([0.5531, 0.6787, 0.7743])}
+[ Epoch: 50 ]
+[ Epoch: 51 ]
+[ Epoch: 52 ]
+[ Epoch: 53 ]
+[ Epoch: 54 ]
+	 TRAIN:  {'MRR': 0.995679497718811, 'hits@[1,3,10]': tensor([0.9921, 0.9993, 0.9999])}
+	 VALID :  {'MRR': 0.626246839761734, 'hits@[1,3,10]': tensor([0.5461, 0.6754, 0.7703])}
+[ Epoch: 55 ]
+[ Epoch: 56 ]
+[ Epoch: 57 ]
+[ Epoch: 58 ]
+[ Epoch: 59 ]
+	 TRAIN:  {'MRR': 0.9986688196659088, 'hits@[1,3,10]': tensor([0.9974, 0.9999, 1.0000])}
+	 VALID :  {'MRR': 0.6297977566719055, 'hits@[1,3,10]': tensor([0.5498, 0.6784, 0.7737])}
+[ Epoch: 60 ]
+[ Epoch: 61 ]
+[ Epoch: 62 ]
+[ Epoch: 63 ]
+[ Epoch: 64 ]
+	 TRAIN:  {'MRR': 0.9990017712116241, 'hits@[1,3,10]': tensor([0.9981, 0.9999, 1.0000])}
+	 VALID :  {'MRR': 0.6318885982036591, 'hits@[1,3,10]': tensor([0.5523, 0.6817, 0.7759])}
+[ Epoch: 65 ]
+[ Epoch: 66 ]
+[ Epoch: 67 ]
+[ Epoch: 68 ]
+[ Epoch: 69 ]
+	 TRAIN:  {'MRR': 0.999392956495285, 'hits@[1,3,10]': tensor([0.9989, 0.9999, 1.0000])}
+	 VALID :  {'MRR': 0.6330281496047974, 'hits@[1,3,10]': tensor([0.5535, 0.6812, 0.7783])}
+[ Epoch: 70 ]
+[ Epoch: 71 ]
+[ Epoch: 72 ]
+[ Epoch: 73 ]
+[ Epoch: 74 ]
+	 TRAIN:  {'MRR': 0.9995815455913544, 'hits@[1,3,10]': tensor([0.9992, 0.9999, 1.0000])}
+	 VALID :  {'MRR': 0.63401198387146, 'hits@[1,3,10]': tensor([0.5551, 0.6820, 0.7784])}
+[ Epoch: 75 ]
+[ Epoch: 76 ]
+[ Epoch: 77 ]
+[ Epoch: 78 ]
+[ Epoch: 79 ]
+	 TRAIN:  {'MRR': 0.9997794926166534, 'hits@[1,3,10]': tensor([0.9996, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6340530216693878, 'hits@[1,3,10]': tensor([0.5553, 0.6817, 0.7788])}
+[ Epoch: 80 ]
+[ Epoch: 81 ]
+[ Epoch: 82 ]
+[ Epoch: 83 ]
+[ Epoch: 84 ]
+	 TRAIN:  {'MRR': 0.9997620582580566, 'hits@[1,3,10]': tensor([0.9995, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6344370245933533, 'hits@[1,3,10]': tensor([0.5563, 0.6809, 0.7791])}
+[ Epoch: 85 ]
+[ Epoch: 86 ]
+[ Epoch: 87 ]
+[ Epoch: 88 ]
+[ Epoch: 89 ]
+	 TRAIN:  {'MRR': 0.9998608529567719, 'hits@[1,3,10]': tensor([0.9997, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.633441686630249, 'hits@[1,3,10]': tensor([0.5549, 0.6802, 0.7791])}
+[ Epoch: 90 ]
+[ Epoch: 91 ]
+[ Epoch: 92 ]
+[ Epoch: 93 ]
+[ Epoch: 94 ]
+	 TRAIN:  {'MRR': 0.9999016225337982, 'hits@[1,3,10]': tensor([0.9998, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6323603093624115, 'hits@[1,3,10]': tensor([0.5534, 0.6789, 0.7782])}
+[ Epoch: 95 ]
+[ Epoch: 96 ]
+[ Epoch: 97 ]
+[ Epoch: 98 ]
+[ Epoch: 99 ]
+	 TRAIN:  {'MRR': 0.999875009059906, 'hits@[1,3,10]': tensor([0.9998, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6318491995334625, 'hits@[1,3,10]': tensor([0.5535, 0.6781, 0.7777])}
+[ Epoch: 100 ]
+[ Epoch: 101 ]
+[ Epoch: 102 ]
+[ Epoch: 103 ]
+[ Epoch: 104 ]
+	 TRAIN:  {'MRR': 0.9999350011348724, 'hits@[1,3,10]': tensor([0.9999, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6311455368995667, 'hits@[1,3,10]': tensor([0.5528, 0.6776, 0.7764])}
+[ Epoch: 105 ]
+[ Epoch: 106 ]
+[ Epoch: 107 ]
+[ Epoch: 108 ]
+[ Epoch: 109 ]
+	 TRAIN:  {'MRR': 0.9999400079250336, 'hits@[1,3,10]': tensor([0.9999, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6309660375118256, 'hits@[1,3,10]': tensor([0.5526, 0.6772, 0.7766])}
+[ Epoch: 110 ]
+[ Epoch: 111 ]
+[ Epoch: 112 ]
+[ Epoch: 113 ]
+[ Epoch: 114 ]
+	 TRAIN:  {'MRR': 0.9999708533287048, 'hits@[1,3,10]': tensor([0.9999, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6302490234375, 'hits@[1,3,10]': tensor([0.5517, 0.6777, 0.7756])}
+[ Epoch: 115 ]
+[ Epoch: 116 ]
+[ Epoch: 117 ]
+[ Epoch: 118 ]
+[ Epoch: 119 ]
+	 TRAIN:  {'MRR': 0.999937504529953, 'hits@[1,3,10]': tensor([0.9999, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6298798024654388, 'hits@[1,3,10]': tensor([0.5513, 0.6773, 0.7755])}
+[ Epoch: 120 ]
+[ Epoch: 121 ]
+[ Epoch: 122 ]
+[ Epoch: 123 ]
+[ Epoch: 124 ]
+	 TRAIN:  {'MRR': 0.9999319911003113, 'hits@[1,3,10]': tensor([0.9999, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6290721595287323, 'hits@[1,3,10]': tensor([0.5505, 0.6768, 0.7745])}
+[ Epoch: 125 ]
+[ Epoch: 126 ]
+[ Epoch: 127 ]
+[ Epoch: 128 ]
+[ Epoch: 129 ]
+	 TRAIN:  {'MRR': 0.9999575018882751, 'hits@[1,3,10]': tensor([0.9999, 1.0000, 1.0000])}
+	 VALID :  {'MRR': 0.6286549270153046, 'hits@[1,3,10]': tensor([0.5504, 0.6761, 0.7734])}
+[ Epoch: 130 ]
+[ Epoch: 131 ]
+[ Epoch: 132 ]
+[ Epoch: 133 ]
+[ Epoch: 134 ]
+Early stopping ...
+
+
+TEST :  {'MRR': 0.6248296499252319, 'hits@[1,3,10]': tensor([0.5448, 0.6724, 0.7746])}

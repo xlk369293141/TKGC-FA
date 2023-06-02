@@ -19,6 +19,9 @@ class Dataset(object):
         for f in ['train', 'test', 'valid']:
             in_file = open(os.path.join(self.root, f + '.pickle'), 'rb')
             self.data[f] = pickle.load(in_file)
+        # for f in ['train', 'test1', 'test2']:
+        #     in_file = open(os.path.join(self.root, f + '.pickle'), 'rb')
+        #     self.data[f] = pickle.load(in_file)
 
         maxis = np.max(self.data['train'], axis=0)
         self.n_entities = int(max(maxis[0], maxis[2]) + 1)
@@ -88,7 +91,7 @@ class Dataset(object):
                 q[:, 0] = q[:, 2]
                 q[:, 2] = tmp
                 q[:, 1] += self.n_predicates // 2
-            ranks = model.get_ranking(q, self.to_skip[m], batch_size=500)
+            ranks = model.get_ranking(q, self.to_skip[m], batch_size=10000)
 
             if log_result:
                 if not flag:

@@ -180,8 +180,8 @@ def prepare_dataset(path, name):
 
 if __name__ == "__main__":
     # datasets = ['WN18RR', 'FB237', 'YAGO3-10']
-    # datasets = ['ICEWS14', 'ICEWS05-15', 'GDELT', 'YAGO15K']  
-    datasets = ['YAGO15K']
+    datasets = ['ICEWS14', 'ICEWS05-15', 'GDELT', 'YAGO15K']  
+    # datasets = ['YAGO15K']
     for d in datasets:
         print("Preparing dataset {}".format(d))
         try:
